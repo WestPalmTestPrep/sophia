@@ -1,4 +1,15 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# misc
 .cursor/
 .loop-flow/
 .mcp.json
 opencode.json
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
