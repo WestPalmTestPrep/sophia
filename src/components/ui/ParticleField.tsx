@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface Particle {
@@ -17,8 +17,15 @@ interface Particle {
 const CHARS = ['♛', '♚', '♝', '♞', '♜', '♟', '·', '·', '✦', '✧'];
 
 export function ParticleField() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(pointer: coarse)').matches);
+  }, []);
+
   const particles = useMemo<Particle[]>(() => {
-    return Array.from({ length: 30 }, (_, i) => ({
+    const count = isMobile ? 12 : 30;
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -28,7 +35,7 @@ export function ParticleField() {
       char: CHARS[Math.floor(Math.random() * CHARS.length)],
       gold: Math.random() > 0.6,
     }));
-  }, []);
+  }, [isMobile]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

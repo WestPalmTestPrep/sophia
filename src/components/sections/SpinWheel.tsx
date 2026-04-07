@@ -216,7 +216,7 @@ export function SpinWheel() {
         style={{
           background: spinning ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.15)',
           border: '1px solid rgba(212,175,55,0.3)',
-          color: spinning ? 'rgba(212,175,55,0.3)' : '#d4af37',
+          color: spinning ? 'rgba(212,175,55,0.55)' : '#d4af37',
           cursor: spinning ? 'not-allowed' : 'pointer',
         }}
       >
@@ -253,7 +253,7 @@ export function SpinWheel() {
 
       {/* Spin counter */}
       {spinCount > 0 && (
-        <p className="font-mono text-[9px] text-white/20 tracking-wider">
+        <p className="font-mono text-[9px] text-white/40 tracking-wider">
           Spins: {spinCount}
         </p>
       )}

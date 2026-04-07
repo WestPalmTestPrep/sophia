@@ -36,9 +36,9 @@ export function Gallery() {
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-red-500/60" />
-          <span className="font-mono text-[10px] text-white/40 tracking-wider">PAV PHOTOGRAPHY</span>
+          <span className="font-mono text-[10px] text-white/55 tracking-wider">PAV PHOTOGRAPHY</span>
         </div>
-        <span className="font-mono text-[10px] tracking-wider" style={{ color: 'rgba(212,175,55,0.4)' }}>
+        <span className="font-mono text-[10px] tracking-wider" style={{ color: 'rgba(212,175,55,0.7)' }}>
           {galleryImages.length} FRAMES
         </span>
       </div>
@@ -83,7 +83,7 @@ export function Gallery() {
                 <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
                   <span
                     className="font-mono text-[10px] font-bold"
-                    style={{ color: 'rgba(212,175,55,0.5)' }}
+                    style={{ color: 'rgba(212,175,55,0.7)' }}
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -93,7 +93,7 @@ export function Gallery() {
                 <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex gap-2">
                     {[settings.aperture, settings.shutter, `ISO ${settings.iso}`].map((s) => (
-                      <span key={s} className="font-mono text-[8px] text-white/40 bg-black/50 px-1.5 py-0.5 rounded">
+                      <span key={s} className="font-mono text-[8px] text-white/60 bg-black/50 px-1.5 py-0.5 rounded">
                         {s}
                       </span>
                     ))}
@@ -112,9 +112,9 @@ export function Gallery() {
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <div className="w-4 h-px" style={{ backgroundColor: 'rgba(212,175,55,0.3)' }} />
-                    <p className="font-mono text-[9px]" style={{ color: 'rgba(212,175,55,0.5)' }}>{image.year}</p>
-                    <span className="font-mono text-[8px] text-white/20">·</span>
-                    <p className="font-mono text-[8px] text-white/30">{settings.aperture}</p>
+                    <p className="font-mono text-[9px]" style={{ color: 'rgba(212,175,55,0.7)' }}>{image.year}</p>
+                    <span className="font-mono text-[8px] text-white/35">·</span>
+                    <p className="font-mono text-[8px] text-white/50">{settings.aperture}</p>
                   </div>
                 </motion.div>
 
@@ -148,7 +148,7 @@ export function Gallery() {
         className="flex items-center justify-center gap-3"
       >
         <div className="w-10 h-px" style={{ backgroundColor: 'rgba(212,175,55,0.15)' }} />
-        <p className="font-mono text-[9px] tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.35)' }}>
+        <p className="font-mono text-[9px] tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.6)' }}>
           Scroll to explore
         </p>
         <div className="w-10 h-px" style={{ backgroundColor: 'rgba(212,175,55,0.15)' }} />

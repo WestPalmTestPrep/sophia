@@ -30,7 +30,7 @@ export function BirthdayMessages() {
             <div className="flex-shrink-0 w-8 text-right">
               <p
                 className="font-mono text-xs font-bold"
-                style={{ color: 'rgba(212,175,55,0.4)' }}
+                style={{ color: 'rgba(212,175,55,0.7)' }}
               >
                 {String(i + 1).padStart(2, '0')}
               </p>
@@ -38,7 +38,7 @@ export function BirthdayMessages() {
 
             <div className="space-y-3 flex-1">
               {/* Quote mark */}
-              <span className="font-serif text-3xl leading-none block -mb-2" style={{ color: 'rgba(212,175,55,0.15)' }}>
+              <span className="font-serif text-3xl leading-none block -mb-2" style={{ color: 'rgba(212,175,55,0.35)' }}>
                 &ldquo;
               </span>
 
@@ -48,13 +48,13 @@ export function BirthdayMessages() {
 
               <div className="flex items-center gap-3 pt-1">
                 <div className="w-5 h-px" style={{ backgroundColor: 'rgba(212,175,55,0.25)' }} />
-                <p className="font-sans text-[11px] tracking-[0.2em] uppercase" style={{ color: 'rgba(212,175,55,0.45)' }}>
+                <p className="font-sans text-[11px] tracking-[0.2em] uppercase" style={{ color: 'rgba(212,175,55,0.7)' }}>
                   {msg.from}
                 </p>
                 {msg.relationship && (
                   <>
-                    <span className="text-white/10 text-[8px]">·</span>
-                    <p className="font-sans text-[10px] text-white/25 tracking-wider">
+                    <span className="text-white/30 text-[8px]">·</span>
+                    <p className="font-sans text-[10px] text-white/50 tracking-wider">
                       {msg.relationship}
                     </p>
                   </>

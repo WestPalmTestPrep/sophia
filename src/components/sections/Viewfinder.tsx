@@ -10,16 +10,16 @@ export function Viewfinder() {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const updatePosition = useCallback((clientX: number, clientY: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    const x = ((clientX - rect.left) / rect.width) * 100;
+    const y = ((clientY - rect.top) / rect.height) * 100;
     setMousePos({ x, y });
 
     const nearby = viewfinderMoments.find((m) => {
       const dist = Math.sqrt((m.x - x) ** 2 + (m.y - y) ** 2);
-      return dist < 12;
+      return dist < 15;
     });
 
     if (nearby) {
@@ -30,19 +30,35 @@ export function Viewfinder() {
     }
   }, []);
 
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    updatePosition(e.clientX, e.clientY);
+  }, [updatePosition]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    updatePosition(e.touches[0].clientX, e.touches[0].clientY);
+  }, [updatePosition]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    updatePosition(e.touches[0].clientX, e.touches[0].clientY);
+  }, [updatePosition]);
+
   const allFound = revealed.size === viewfinderMoments.length;
 
   return (
     <div className="space-y-4">
-      <p className="text-center font-sans text-xs tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.5)' }}>
-        Move your cursor to discover hidden moments
+      <p className="text-center font-sans text-xs tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.7)' }}>
+        <span className="hidden sm:inline">Move your cursor to discover hidden moments</span>
+        <span className="sm:hidden">Drag your finger to discover hidden moments</span>
       </p>
 
       {/* Viewfinder frame */}
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className="relative w-full aspect-[16/10] overflow-hidden cursor-crosshair rounded-sm"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        className="relative w-full aspect-[3/4] sm:aspect-[16/10] overflow-hidden cursor-crosshair rounded-sm touch-none"
         style={{
           background: '#050505',
           border: '1px solid rgba(212,175,55,0.1)',
@@ -151,7 +167,7 @@ export function Viewfinder() {
                     >
                       {moment.text}
                     </p>
-                    <p className="font-sans text-[10px] sm:text-[11px] text-white/50 tracking-wider mt-1">
+                    <p className="font-sans text-[10px] sm:text-[11px] text-white/65 tracking-wider mt-1">
                       {moment.subtext}
                     </p>
                   </motion.div>
@@ -163,11 +179,11 @@ export function Viewfinder() {
 
         {/* Camera HUD */}
         <div className="absolute top-3 left-4 z-20 pointer-events-none space-y-0.5">
-          <p className="font-mono text-[10px] text-white/40">ISO 400</p>
-          <p className="font-mono text-[10px] text-white/40">f/1.8</p>
+          <p className="font-mono text-[10px] text-white/55">ISO 400</p>
+          <p className="font-mono text-[10px] text-white/55">f/1.8</p>
         </div>
         <div className="absolute top-3 right-4 z-20 pointer-events-none text-right space-y-0.5">
-          <p className="font-mono text-[10px] text-white/40">1/125</p>
+          <p className="font-mono text-[10px] text-white/55">1/125</p>
           <p className="font-mono text-[10px] font-bold" style={{ color: 'rgba(212,175,55,0.6)' }}>PAV</p>
         </div>
         <div className="absolute bottom-3 left-4 z-20 pointer-events-none">
@@ -184,7 +200,7 @@ export function Viewfinder() {
           <span className="font-mono text-[10px] font-bold" style={{ color: allFound ? '#d4af37' : 'rgba(255,255,255,0.5)' }}>
             {revealed.size}/{viewfinderMoments.length}
           </span>
-          <span className="font-mono text-[9px] text-white/30 ml-1">found</span>
+          <span className="font-mono text-[9px] text-white/50 ml-1">found</span>
         </div>
 
         {/* Corner brackets - gold */}
@@ -196,7 +212,7 @@ export function Viewfinder() {
 
       <p
         className="text-center text-xs font-mono tracking-wider"
-        style={{ color: allFound ? '#d4af37' : 'rgba(255,255,255,0.35)' }}
+        style={{ color: allFound ? '#d4af37' : 'rgba(255,255,255,0.55)' }}
       >
         {allFound
           ? '✦ Every moment found. Every frame matters. ✦'

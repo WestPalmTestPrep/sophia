@@ -27,12 +27,12 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
       />
 
       {/* Header */}
-      <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-black/90 backdrop-blur-md border-b border-white/[0.03]">
+      <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-black/90 backdrop-blur-md border-b border-white/[0.03]" style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
         <button
           onClick={onClose}
-          className="font-mono text-[10px] text-white/25 hover:text-[rgba(212,175,55,0.6)] active:text-white/40 transition-colors tracking-[0.2em] uppercase min-h-[44px] flex items-center gap-2"
+          className="font-mono text-[10px] text-white/50 hover:text-[rgba(212,175,55,0.8)] active:text-white/60 transition-colors tracking-[0.2em] uppercase min-h-[44px] flex items-center gap-2"
         >
-          <span className="text-white/15">&#8592;</span> Back
+          <span className="text-white/40">&#8592;</span> Back
         </button>
 
         <motion.h2
@@ -40,12 +40,12 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="font-serif text-xs sm:text-sm tracking-[0.3em] uppercase"
-          style={{ color: 'rgba(212, 175, 55, 0.5)' }}
+          style={{ color: 'rgba(212, 175, 55, 0.75)' }}
         >
           {title}
         </motion.h2>
 
-        <div className="w-16 sm:w-20" />
+        <div className="w-12 sm:w-20" />
       </div>
 
       {/* Content */}

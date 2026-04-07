@@ -7,7 +7,7 @@ export function AuroraBackground() {
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {/* Blob 1 - warm gold */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-[0.03]"
+        className="absolute w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full opacity-[0.03]"
         style={{
           background: 'radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%)',
           filter: 'blur(80px)',
@@ -20,7 +20,7 @@ export function AuroraBackground() {
       />
       {/* Blob 2 - cool amber */}
       <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full opacity-[0.025]"
+        className="absolute w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] rounded-full opacity-[0.025]"
         style={{
           background: 'radial-gradient(circle, rgba(255,140,50,0.6) 0%, rgba(255,140,50,0) 70%)',
           filter: 'blur(100px)',
@@ -34,7 +34,7 @@ export function AuroraBackground() {
       />
       {/* Blob 3 - subtle purple */}
       <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full opacity-[0.02]"
+        className="absolute w-[200px] h-[200px] sm:w-[400px] sm:h-[400px] rounded-full opacity-[0.02]"
         style={{
           background: 'radial-gradient(circle, rgba(150,100,255,0.5) 0%, rgba(150,100,255,0) 70%)',
           filter: 'blur(90px)',

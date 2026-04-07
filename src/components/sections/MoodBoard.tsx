@@ -109,25 +109,26 @@ export function MoodBoard() {
             onChange={e => setBoardTitle(e.target.value)}
             onBlur={() => setIsEditingTitle(false)}
             onKeyDown={e => e.key === 'Enter' && setIsEditingTitle(false)}
-            className="bg-transparent text-center font-serif text-2xl sm:text-3xl tracking-wider text-white/60 border-b border-white/10 outline-none w-full max-w-md"
+            className="bg-transparent text-center font-serif text-2xl sm:text-3xl tracking-wider text-white/75 border-b border-white/20 outline-none w-full max-w-md"
           />
         ) : (
           <h3
             onClick={() => setIsEditingTitle(true)}
-            className="font-serif text-2xl sm:text-3xl tracking-wider text-white/60 cursor-text hover:text-white/80 transition-colors"
+            className="font-serif text-2xl sm:text-3xl tracking-wider text-white/75 cursor-text hover:text-white/90 transition-colors"
           >
             {boardTitle}
           </h3>
         )}
-        <p className="text-[10px] text-white/20 font-mono tracking-widest uppercase">
-          Click palette items, then click the board to place them
+        <p className="text-[10px] text-white/45 font-mono tracking-widest uppercase">
+          <span className="hidden sm:inline">Click palette items, then click the board to place them</span>
+          <span className="sm:hidden">Tap palette items, then tap the board to place</span>
         </p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4 flex-1">
         {/* Palette */}
         <div className="lg:w-48 shrink-0">
-          <p className="text-[9px] text-white/30 font-mono tracking-widest uppercase mb-3">
+          <p className="text-[9px] text-white/50 font-mono tracking-widest uppercase mb-3">
             Palette
           </p>
           <div className="flex flex-wrap lg:flex-col gap-2">
@@ -153,7 +154,7 @@ export function MoodBoard() {
                 )}
                 {item.type === 'word' && (
                   <div className="px-2 py-1 border border-white/10 rounded">
-                    <span className="text-[10px] text-white/50 font-serif italic">
+                    <span className="text-[10px] text-white/70 font-serif italic">
                       {item.content}
                     </span>
                   </div>
@@ -178,7 +179,7 @@ export function MoodBoard() {
         <div
           ref={boardRef}
           onClick={handleBoardDrop}
-          className="flex-1 relative min-h-[400px] lg:min-h-[500px] rounded border border-white/[0.06] overflow-hidden"
+          className="flex-1 relative min-h-[300px] sm:min-h-[400px] lg:min-h-[500px] rounded border border-white/[0.06] overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(20,20,20,1) 0%, rgba(30,28,24,1) 100%)',
             cursor: dragging ? 'copy' : 'default',
@@ -238,8 +239,11 @@ export function MoodBoard() {
                   </span>
                 )}
                 {/* Remove hint */}
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-[8px] text-white/30 font-mono whitespace-nowrap">double-click to remove</span>
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
+                  <span className="text-[8px] text-white/30 font-mono whitespace-nowrap">
+                    <span className="hidden sm:inline">double-click to remove</span>
+                    <span className="sm:hidden">double-tap to remove</span>
+                  </span>
                 </div>
               </motion.div>
             ))}
@@ -249,8 +253,8 @@ export function MoodBoard() {
           {items.length === 0 && !dragging && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center space-y-2">
-                <p className="text-white/10 text-4xl">◬</p>
-                <p className="text-white/15 text-xs font-serif italic">
+                <p className="text-white/25 text-4xl">◬</p>
+                <p className="text-white/35 text-xs font-serif italic">
                   Select from the palette and click to place
                 </p>
               </div>
@@ -265,13 +269,13 @@ export function MoodBoard() {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-[9px] text-white/15 font-mono tracking-widest uppercase">
+      <div className="flex items-center justify-between text-[9px] text-white/40 font-mono tracking-widest uppercase">
         <span>Items placed: {items.length}</span>
         <span>Creative Director Mode</span>
         {items.length > 0 && (
           <button
             onClick={() => setItems([])}
-            className="text-white/20 hover:text-white/40 transition-colors"
+            className="text-white/45 hover:text-white/65 transition-colors"
           >
             Clear All
           </button>

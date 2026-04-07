@@ -29,25 +29,35 @@ export function HerWords() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const updatePos = useCallback((clientX: number, clientY: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect) return;
     setMousePos({
-      x: (e.clientX - rect.left) / rect.width,
-      y: (e.clientY - rect.top) / rect.height,
+      x: (clientX - rect.left) / rect.width,
+      y: (clientY - rect.top) / rect.height,
     });
   }, []);
 
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    updatePos(e.clientX, e.clientY);
+  }, [updatePos]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    updatePos(e.touches[0].clientX, e.touches[0].clientY);
+  }, [updatePos]);
+
   return (
     <div className="space-y-4">
-      <p className="text-center font-sans text-xs tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.5)' }}>
-        Move to shift perspective
+      <p className="text-center font-sans text-xs tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.7)' }}>
+        <span className="hidden sm:inline">Move to shift perspective</span>
+        <span className="sm:hidden">Drag to shift perspective</span>
       </p>
 
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className="relative w-full min-h-[70vh] overflow-hidden cursor-default"
+        onTouchMove={handleTouchMove}
+        className="relative w-full min-h-[50vh] sm:min-h-[70vh] overflow-hidden cursor-default touch-none"
       >
         {wordEntries.map((entry, i) => {
           const baseX = ((i * 37 + 13) % 80) + 5;

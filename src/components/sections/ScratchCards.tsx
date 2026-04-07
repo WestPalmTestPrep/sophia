@@ -200,16 +200,16 @@ function ScratchCardComponent({ card, index }: { card: ScratchCard; index: numbe
     >
       {/* Label */}
       <div className="px-4 pt-3 pb-2 flex items-center justify-between">
-        <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: 'rgba(212,175,55,0.4)' }}>
+        <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: 'rgba(212,175,55,0.7)' }}>
           {card.label}
         </span>
-        <span className="font-mono text-[9px] text-white/20">
+        <span className="font-mono text-[9px] text-white/45">
           {revealed ? '✓ Revealed' : `${Math.round(scratchPercent * 100)}%`}
         </span>
       </div>
 
       {/* Scratch area */}
-      <div className="relative mx-3 mb-3 rounded-lg overflow-hidden" style={{ height: '140px' }}>
+      <div className="relative mx-3 mb-3 rounded-lg overflow-hidden" style={{ minHeight: '140px', height: '35vw', maxHeight: '180px' }}>
         {/* Revealed content underneath */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-3 bg-black">
           <AnimatePresence>
@@ -222,14 +222,14 @@ function ScratchCardComponent({ card, index }: { card: ScratchCard; index: numbe
                 <p className="font-serif text-sm sm:text-base text-white/85 leading-relaxed">
                   {card.reveal}
                 </p>
-                <p className="font-mono text-[9px] tracking-wider" style={{ color: 'rgba(212,175,55,0.5)' }}>
+                <p className="font-mono text-[9px] tracking-wider" style={{ color: 'rgba(212,175,55,0.7)' }}>
                   {card.sublabel}
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
           {!revealed && (
-            <p className="font-serif text-sm text-white/20 italic">Scratch to reveal...</p>
+            <p className="font-serif text-sm text-white/45 italic">Scratch to reveal...</p>
           )}
         </div>
 
@@ -257,7 +257,7 @@ export function ScratchCards() {
   return (
     <div className="space-y-6 py-4">
       <div className="text-center space-y-2">
-        <p className="font-mono text-[10px] tracking-widest uppercase" style={{ color: 'rgba(212,175,55,0.5)' }}>
+        <p className="font-mono text-[10px] tracking-widest uppercase" style={{ color: 'rgba(212,175,55,0.7)' }}>
           Scratch each card to reveal what&apos;s inside
         </p>
       </div>
@@ -269,7 +269,7 @@ export function ScratchCards() {
       </div>
 
       <div className="text-center">
-        <p className="font-mono text-[10px] text-white/25 tracking-wider">
+        <p className="font-mono text-[10px] text-white/45 tracking-wider">
           {revealedCount === CARDS.length
             ? '✦ All cards revealed ✦'
             : 'Drag your finger or mouse to scratch'}

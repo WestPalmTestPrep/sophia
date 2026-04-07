@@ -42,7 +42,7 @@ export function Timeline() {
                 <div className="flex-shrink-0 w-8 sm:w-12 text-right">
                   <p
                     className="font-mono text-xs sm:text-sm font-bold"
-                    style={{ color: isAchievement ? '#d4af37' : 'rgba(255,255,255,0.5)' }}
+                    style={{ color: isAchievement ? '#d4af37' : 'rgba(255,255,255,0.65)' }}
                   >
                     {event.year}
                   </p>
@@ -87,7 +87,7 @@ export function Timeline() {
                   >
                     {event.title}
                   </h3>
-                  <p className="font-sans text-xs sm:text-sm text-white/50 mt-1.5 leading-relaxed">
+                  <p className="font-sans text-xs sm:text-sm text-white/65 mt-1.5 leading-relaxed">
                     {event.description}
                   </p>
                   <span

@@ -47,7 +47,7 @@ export function Achievements() {
             <p className="font-mono text-2xl font-bold" style={{ color: '#d4af37' }}>
               {value}
             </p>
-            <p className="font-mono text-[9px] text-white/40 tracking-widest uppercase mt-1">
+            <p className="font-mono text-[9px] text-white/55 tracking-widest uppercase mt-1">
               {label}
             </p>
           </div>
@@ -100,7 +100,7 @@ export function Achievements() {
                     {badge.rarity}
                   </span>
                 </div>
-                <p className="font-sans text-[11px] sm:text-xs text-white/45 mt-1 truncate">
+                <p className="font-sans text-[11px] sm:text-xs text-white/60 mt-1 truncate">
                   {badge.description}
                 </p>
               </div>
@@ -120,7 +120,7 @@ export function Achievements() {
       {/* Locked */}
       {locked.length > 0 && (
         <div className="space-y-2">
-          <p className="font-mono text-[10px] text-white/25 tracking-[0.3em] uppercase mb-3 px-4">
+          <p className="font-mono text-[10px] text-white/45 tracking-[0.3em] uppercase mb-3 px-4">
             Locked
           </p>
           {locked.map((badge, i) => (
@@ -135,10 +135,10 @@ export function Achievements() {
                 {badge.icon}
               </span>
               <div className="flex-1">
-                <h3 className="font-serif text-sm text-white/40 tracking-wider">
+                <h3 className="font-serif text-sm text-white/55 tracking-wider">
                   {badge.title}
                 </h3>
-                <p className="font-sans text-[10px] text-white/20 mt-0.5">
+                <p className="font-sans text-[10px] text-white/40 mt-0.5">
                   {badge.description}
                 </p>
               </div>

@@ -174,7 +174,7 @@ export function PavWrapped() {
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/40 mb-6"
+              className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/55 mb-6"
             >
               {slide.statLabel}
             </motion.p>
@@ -185,7 +185,7 @@ export function PavWrapped() {
               initial={{ y: -10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.1 }}
-              className="font-mono text-[10px] sm:text-xs tracking-[0.3em] uppercase text-white/40 mb-4"
+              className="font-mono text-[10px] sm:text-xs tracking-[0.3em] uppercase text-white/55 mb-4"
             >
               {slide.topText}
             </motion.p>
@@ -209,7 +209,7 @@ export function PavWrapped() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="font-sans text-sm sm:text-base text-white/45 mt-6 max-w-md leading-relaxed"
+              className="font-sans text-sm sm:text-base text-white/60 mt-6 max-w-md leading-relaxed"
             >
               {slide.subText}
             </motion.p>
@@ -232,7 +232,7 @@ export function PavWrapped() {
         <motion.p
           animate={{ opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="font-mono text-[9px] text-white/30 tracking-widest uppercase"
+          className="font-mono text-[9px] text-white/50 tracking-widest uppercase"
         >
           {autoPlay ? 'Tap sides to navigate' : `${current + 1} / ${SLIDES.length}`}
         </motion.p>

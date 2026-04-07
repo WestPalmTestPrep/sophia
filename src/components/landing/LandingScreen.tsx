@@ -64,17 +64,19 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
     setExiting(true);
 
     // Spawn burst particles from click point
-    const burst = Array.from({ length: 40 }, (_, i) => {
-      const angle = (i / 40) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
-      const speed = 3 + Math.random() * 8;
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    const count = isMobile ? 35 : 80;
+    const burst = Array.from({ length: count }, (_, i) => {
+      const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+      const speed = 2 + Math.random() * 12;
       return {
         id: i,
         x: e.clientX,
         y: e.clientY,
         vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: 4 + Math.random() * 12,
-        char: ['♛', '♚', '♝', '♞', '♜', '✦', '✧', '◆'][Math.floor(Math.random() * 8)],
+        vy: Math.sin(angle) * speed - Math.random() * 3,
+        size: 4 + Math.random() * 16,
+        char: ['♛', '♚', '♝', '♞', '♜', '✦', '✧', '◆', '♕', '⊙', '☽'][Math.floor(Math.random() * 11)],
       };
     });
     setParticles(burst);
@@ -107,12 +109,40 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
       className="fixed inset-0 flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden bg-black"
       onClick={handleClick}
     >
+      {/* Floating chess symbols in background */}
+      {['♛', '♚', '♝', '♞', '♜', '♟', '♛', '♚'].map((char, i) => (
+        <motion.div
+          key={`chess-${i}`}
+          className="absolute pointer-events-none select-none"
+          style={{
+            left: `${8 + (i * 37 + 13) % 80}%`,
+            top: `${5 + (i * 53 + 7) % 85}%`,
+            fontSize: 20 + (i % 4) * 10,
+            color: 'rgba(212,175,55,0.04)',
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{
+            opacity: [0, 0.04, 0.02, 0.04, 0],
+            y: [0, -30, 0],
+            rotate: [0, i % 2 === 0 ? 15 : -15, 0],
+          }}
+          transition={{
+            duration: 8 + i * 2,
+            delay: 0.5 + i * 0.3,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        >
+          {char}
+        </motion.div>
+      ))}
+
       {/* Animated grid lines */}
       {Array.from({ length: 8 }, (_, i) => (
         <motion.div
           key={`h-${i}`}
           initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 0.02 }}
+          animate={{ scaleX: 1, opacity: 0.03 }}
           transition={{ duration: 2, delay: 0.3 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="absolute left-0 right-0 h-px bg-white origin-left"
           style={{ top: `${12.5 * (i + 1)}%` }}
@@ -122,7 +152,7 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
         <motion.div
           key={`v-${i}`}
           initial={{ scaleY: 0, opacity: 0 }}
-          animate={{ scaleY: 1, opacity: 0.015 }}
+          animate={{ scaleY: 1, opacity: 0.02 }}
           transition={{ duration: 2, delay: 0.5 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="absolute top-0 bottom-0 w-px bg-white origin-top"
           style={{ left: `${12.5 * (i + 1)}%` }}
@@ -134,7 +164,7 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: [0, 0.08, 0.03, 0.06, 0.03], scale: [0.5, 1.2, 1, 1.1, 1] }}
         transition={{ duration: 4, delay: 1, repeat: Infinity }}
-        className="absolute w-[600px] h-[600px] rounded-full"
+        className="absolute w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full"
         style={{
           background: 'radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(212,175,55,0) 70%)',
           filter: 'blur(60px)',
@@ -144,9 +174,9 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
       {/* Happy Birthday */}
       <motion.p
         initial={{ opacity: 0, letterSpacing: '0.2em' }}
-        animate={{ opacity: 0.7, letterSpacing: '0.6em' }}
+        animate={{ opacity: 0.7, letterSpacing: '0.4em' }}
         transition={{ duration: 2, delay: 0.8 }}
-        className="font-mono text-[10px] sm:text-[11px] uppercase text-white/70 mb-8"
+        className="font-mono text-[10px] sm:text-[11px] uppercase text-white/70 mb-6 sm:mb-8"
       >
         Happy Birthday
       </motion.p>
@@ -232,7 +262,8 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
           className="font-mono text-[9px] tracking-[0.5em] uppercase text-white"
         >
-          Click anywhere
+          <span className="hidden sm:inline">Click anywhere</span>
+          <span className="sm:hidden">Tap anywhere</span>
         </motion.p>
       </motion.div>
 

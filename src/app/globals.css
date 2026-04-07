@@ -73,11 +73,13 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* Custom cursor */
-body {
-  cursor: url('/cursors/queen-default.svg') 12 12, auto;
-}
+/* Custom cursor — disabled on touch devices */
+@media (pointer: fine) {
+  body {
+    cursor: url('/cursors/queen-default.svg') 12 12, auto;
+  }
 
-a, button, [role="button"], .cursor-pointer {
-  cursor: url('/cursors/queen-pointer.svg') 14 14, pointer;
+  a, button, [role="button"], .cursor-pointer {
+    cursor: url('/cursors/queen-pointer.svg') 14 14, pointer;
+  }
 }

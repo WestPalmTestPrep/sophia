@@ -23,7 +23,8 @@ export function Confetti({ active }: ConfettiProps) {
 
   useEffect(() => {
     if (active) {
-      const newParticles: Particle[] = Array.from({ length: 40 }, (_, i) => ({
+      const count = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches ? 18 : 40;
+      const newParticles: Particle[] = Array.from({ length: count }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         delay: Math.random() * 0.5,

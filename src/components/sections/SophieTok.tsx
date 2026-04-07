@@ -134,7 +134,7 @@ function StatCard({ card }: { card: TokCard }) {
         >
           {card.stat}
         </p>
-        <p className="text-white/40 text-sm font-sans tracking-wider uppercase">
+        <p className="text-white/60 text-sm font-sans tracking-wider uppercase">
           {card.statLabel}
         </p>
       </motion.div>
@@ -146,7 +146,7 @@ function StatCard({ card }: { card: TokCard }) {
         className="mt-6 space-y-1"
       >
         <p className="text-white/60 font-serif text-lg">{card.headline}</p>
-        <p className="text-white/25 text-xs max-w-xs">{card.subtext}</p>
+        <p className="text-white/45 text-xs max-w-xs">{card.subtext}</p>
       </motion.div>
     </div>
   );
@@ -178,7 +178,7 @@ function MilestoneCard({ card }: { card: TokCard }) {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="text-white/40 text-sm sm:text-base max-w-sm leading-relaxed font-serif italic"
+        className="text-white/60 text-sm sm:text-base max-w-sm leading-relaxed font-serif italic"
       >
         {card.subtext}
       </motion.p>
@@ -212,7 +212,7 @@ function QuoteCard({ card }: { card: TokCard }) {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4 }}
-        className="text-white/50 font-serif text-lg sm:text-xl italic max-w-md leading-relaxed"
+        className="text-white/65 font-serif text-lg sm:text-xl italic max-w-md leading-relaxed"
       >
         {card.subtext}
       </motion.p>
@@ -229,7 +229,7 @@ function QuoteCard({ card }: { card: TokCard }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-white/20 text-[10px] font-mono tracking-widest uppercase mt-3"
+        className="text-white/60 text-[10px] font-mono tracking-widest uppercase mt-3"
       >
         {card.headline}
       </motion.p>
@@ -263,7 +263,7 @@ function VibeCard({ card }: { card: TokCard }) {
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="text-white/35 text-sm max-w-sm leading-relaxed"
+        className="text-white/55 text-sm max-w-sm leading-relaxed"
       >
         {card.subtext}
       </motion.p>
@@ -342,20 +342,20 @@ export function SophieTok() {
       onTouchEnd={handleTouchEnd}
     >
       {/* TikTok-style UI frame */}
-      <div className="absolute top-2 left-0 right-0 flex items-center justify-center z-20">
-        <div className="flex items-center gap-2 sm:gap-3">
+      <div className="absolute top-2 left-0 right-0 flex items-center justify-center z-20 px-2">
+        <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap justify-center">
           <div className="w-6 h-6 rounded-full border border-[rgba(212,175,55,0.3)] flex items-center justify-center">
             <span className="text-[10px]" style={{ color: 'rgba(212,175,55,0.6)' }}>♛</span>
           </div>
-          <span className="text-[10px] font-mono tracking-wider text-white/30">
+          <span className="text-[8px] sm:text-[10px] font-mono tracking-wider text-white/65">
             @sophie.pav
           </span>
-          <span className="text-white/10 text-[8px]">·</span>
-          <span className="text-[10px] font-mono tracking-wider text-white/30">
+          <span className="text-white/25 text-[8px] hidden sm:inline">·</span>
+          <span className="text-[8px] sm:text-[10px] font-mono tracking-wider text-white/65 hidden sm:inline">
             @pavweddings
           </span>
-          <span className="text-white/10 text-[8px]">·</span>
-          <span className="text-[10px] font-mono tracking-wider text-white/30">
+          <span className="text-white/25 text-[8px] hidden sm:inline">·</span>
+          <span className="text-[8px] sm:text-[10px] font-mono tracking-wider text-white/65 hidden sm:inline">
             @sophitness_
           </span>
         </div>
@@ -400,10 +400,10 @@ export function SophieTok() {
           transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center gap-1"
         >
-          <span className="text-[8px] font-mono text-white/30 tracking-widest uppercase">
+          <span className="text-[8px] font-mono text-white/65 tracking-widest uppercase">
             {currentIndex < CARDS.length - 1 ? 'Scroll or swipe' : 'Back to top'}
           </span>
-          <span className="text-white/20 text-xs">
+          <span className="text-white/60 text-xs">
             {currentIndex < CARDS.length - 1 ? '↓' : '↑'}
           </span>
         </motion.div>
