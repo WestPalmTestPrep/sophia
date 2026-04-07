@@ -41,32 +41,32 @@ export function Square({
         isValidMove && !hasQueen && !isUnlockable && 'hover:bg-white/[0.08]',
       )}
       onClick={onClick}
-      whileHover={isValidMove && !hasQueen ? { scale: 1.06, zIndex: 5 } : undefined}
+      whileHover={isValidMove && !hasQueen ? { scale: 1.08, zIndex: 5 } : undefined}
       whileTap={isValidMove ? { scale: 0.94 } : undefined}
     >
-      {/* Valid move indicator */}
+      {/* Valid move indicator - gold dot */}
       {isValidMove && !hasQueen && !isUnlockable && (
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           className={cn(
-            'w-1.5 h-1.5 rounded-full',
-            isLight ? 'bg-black/10' : 'bg-white/10'
+            'w-2 h-2 rounded-full',
+            isLight ? 'bg-[rgba(160,120,20,0.4)]' : 'bg-[rgba(212,175,55,0.35)]'
           )}
         />
       )}
 
       {/* Unlockable square */}
       {isUnlockable && (
-        <div className="absolute inset-0 flex items-center justify-center group">
-          {/* Glow ring */}
+        <div className="absolute inset-0 flex items-center justify-center group overflow-visible">
+          {/* Gold glow ring for unlockable */}
           {!isUnlocked && (
             <motion.div
               animate={{
                 boxShadow: [
-                  'inset 0 0 8px rgba(255,255,255,0.02)',
-                  'inset 0 0 20px rgba(255,255,255,0.08)',
-                  'inset 0 0 8px rgba(255,255,255,0.02)',
+                  'inset 0 0 8px rgba(212,175,55,0.05)',
+                  'inset 0 0 24px rgba(212,175,55,0.15)',
+                  'inset 0 0 8px rgba(212,175,55,0.05)',
                 ],
               }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
@@ -74,31 +74,51 @@ export function Square({
             />
           )}
 
-          <div className="flex flex-col items-center gap-0.5">
+          {/* Unlocked gold border */}
+          {isUnlocked && (
+            <div
+              className="absolute inset-0"
+              style={{
+                boxShadow: 'inset 0 0 12px rgba(212,175,55,0.1)',
+              }}
+            />
+          )}
+
+          <div className="flex flex-col items-center gap-0.5 relative">
             <motion.span
-              animate={!isUnlocked ? { opacity: [0.3, 0.7, 0.3] } : { opacity: 0.2 }}
+              animate={!isUnlocked
+                ? { opacity: [0.6, 1, 0.6], scale: [1, 1.05, 1] }
+                : { opacity: 0.5 }
+              }
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
               className={cn(
-                'text-sm sm:text-lg transition-all duration-300',
-                isLight ? 'text-black/60' : 'text-white/60'
+                'text-base sm:text-xl transition-all duration-300',
+                isLight ? 'text-black/80' : 'text-white/90'
               )}
+              style={!isUnlocked ? {
+                filter: `drop-shadow(0 0 6px rgba(212,175,55,0.4))`,
+              } : undefined}
             >
               {unlockConfig.icon}
             </motion.span>
 
-            {/* Label on hover */}
+            {/* Label on hover — positioned absolutely so it doesn't get clipped */}
             <span className={cn(
-              'text-[6px] sm:text-[8px] font-sans font-medium tracking-[0.15em] uppercase opacity-0 group-hover:opacity-50 transition-opacity duration-300 whitespace-nowrap',
-              isLight ? 'text-black' : 'text-white'
-            )}>
+              'absolute top-full mt-1 left-1/2 -translate-x-1/2 text-[7px] sm:text-[9px] font-sans font-semibold tracking-[0.1em] uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-20 pointer-events-none px-2 py-1 rounded shadow-lg',
+              isLight ? 'text-black bg-[#E8E8E8]' : 'text-white bg-[#1a1a1a]'
+            )}
+            style={{
+              border: '1px solid rgba(212,175,55,0.2)',
+            }}
+            >
               {unlockConfig.label}
             </span>
           </div>
 
-          {/* Visited indicator */}
+          {/* Visited indicator - gold dot */}
           {isUnlocked && (
-            <div className="absolute top-1 right-1">
-              <div className="w-1 h-1 rounded-full bg-white/20" />
+            <div className="absolute top-1.5 right-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[rgba(212,175,55,0.5)]" />
             </div>
           )}
         </div>

@@ -64,7 +64,7 @@ export function useChessNavigation() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeSection, closeSection]);
 
-  const allUnlocked = useMemo(() => unlockedSections.size === 6, [unlockedSections]);
+  const allUnlocked = useMemo(() => unlockedSections.size === UNLOCKABLE_SQUARES.length, [unlockedSections]);
 
   return {
     queenPosition,

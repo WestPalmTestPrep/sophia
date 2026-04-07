@@ -26,8 +26,8 @@ export function MoveLog({ moves }: MoveLogProps) {
       transition={{ delay: 1.5 }}
       className="fixed right-4 top-1/2 -translate-y-1/2 z-20 hidden sm:block"
     >
-      <div className="bg-white/[0.03] border border-white/5 rounded px-3 py-2 backdrop-blur-sm">
-        <p className="text-[9px] text-white/20 font-sans tracking-widest uppercase mb-2">
+      <div className="bg-white/[0.05] border border-white/10 rounded px-3 py-2 backdrop-blur-sm">
+        <p className="text-[9px] text-white/40 font-sans tracking-widest uppercase mb-2">
           Moves
         </p>
         <AnimatePresence mode="popLayout">
@@ -39,9 +39,9 @@ export function MoveLog({ moves }: MoveLogProps) {
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 5 }}
-                className="text-[11px] font-mono text-white/25 leading-relaxed"
+                className="text-[11px] font-mono text-white/50 leading-relaxed"
               >
-                <span className="text-white/15">{moveNumber}.</span>{' '}
+                <span className="text-white/30">{moveNumber}.</span>{' '}
                 {toNotation(move)}
               </motion.div>
             );

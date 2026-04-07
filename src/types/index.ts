@@ -1,4 +1,4 @@
-export type SectionId = 'gallery' | 'messages' | 'timeline' | 'achievements' | 'viewfinder' | 'words';
+export type SectionId = 'gallery' | 'messages' | 'timeline' | 'achievements' | 'viewfinder' | 'words' | 'moodboard' | 'sophietok';
 
 export type Phase = 'landing' | 'board';
 

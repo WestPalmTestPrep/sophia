@@ -11,17 +11,26 @@ interface SectionWrapperProps {
 export function SectionWrapper({ title, onClose, children }: SectionWrapperProps) {
   return (
     <motion.div
-      initial={{ clipPath: 'inset(100% 0 0 0)' }}
-      animate={{ clipPath: 'inset(0 0 0 0)' }}
-      exit={{ clipPath: 'inset(0 0 100% 0)' }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ clipPath: 'circle(0% at 50% 50%)' }}
+      animate={{ clipPath: 'circle(150% at 50% 50%)' }}
+      exit={{ clipPath: 'circle(0% at 50% 50%)' }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-0 z-50 bg-black overflow-y-auto"
     >
+      {/* Subtle gold accent line at top */}
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute top-0 left-0 right-0 h-px origin-left"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent)' }}
+      />
+
       {/* Header */}
       <div className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-8 py-4 sm:py-5 bg-black/90 backdrop-blur-md border-b border-white/[0.03]">
         <button
           onClick={onClose}
-          className="font-mono text-[10px] text-white/25 hover:text-white/60 active:text-white/40 transition-colors tracking-[0.2em] uppercase min-h-[44px] flex items-center gap-2"
+          className="font-mono text-[10px] text-white/25 hover:text-[rgba(212,175,55,0.6)] active:text-white/40 transition-colors tracking-[0.2em] uppercase min-h-[44px] flex items-center gap-2"
         >
           <span className="text-white/15">&#8592;</span> Back
         </button>
@@ -29,8 +38,9 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
         <motion.h2
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="font-serif text-xs sm:text-sm tracking-[0.3em] text-white/40 uppercase"
+          transition={{ delay: 0.4 }}
+          className="font-serif text-xs sm:text-sm tracking-[0.3em] uppercase"
+          style={{ color: 'rgba(212, 175, 55, 0.5)' }}
         >
           {title}
         </motion.h2>
@@ -40,9 +50,9 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
 
       {/* Content */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="px-4 sm:px-8 py-6 sm:py-10 max-w-5xl mx-auto"
       >
         {children}

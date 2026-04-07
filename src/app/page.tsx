@@ -6,6 +6,7 @@ import { Phase } from '@/types';
 import { LandingScreen } from '@/components/landing/LandingScreen';
 import { Chessboard } from '@/components/chess/Chessboard';
 import { GrainOverlay } from '@/components/ui/GrainOverlay';
+import { CursorGlow } from '@/components/ui/CursorGlow';
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>('landing');
@@ -13,6 +14,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white">
       <GrainOverlay />
+      <CursorGlow />
       <AnimatePresence mode="wait">
         {phase === 'landing' ? (
           <LandingScreen key="landing" onComplete={() => setPhase('board')} />

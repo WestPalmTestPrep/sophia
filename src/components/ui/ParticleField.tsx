@@ -11,20 +11,22 @@ interface Particle {
   duration: number;
   delay: number;
   char: string;
+  gold: boolean;
 }
 
-const CHARS = ['♛', '♚', '♝', '♞', '♜', '♟', '·', '·', '·', '·'];
+const CHARS = ['♛', '♚', '♝', '♞', '♜', '♟', '·', '·', '✦', '✧'];
 
 export function ParticleField() {
   const particles = useMemo<Particle[]>(() => {
-    return Array.from({ length: 20 }, (_, i) => ({
+    return Array.from({ length: 30 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: 8 + Math.random() * 10,
-      duration: 15 + Math.random() * 25,
-      delay: Math.random() * 10,
+      size: 8 + Math.random() * 14,
+      duration: 12 + Math.random() * 20,
+      delay: Math.random() * 8,
       char: CHARS[Math.floor(Math.random() * CHARS.length)],
+      gold: Math.random() > 0.6,
     }));
   }, []);
 
@@ -33,17 +35,21 @@ export function ParticleField() {
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute text-white/[0.03]"
+          className="absolute"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             fontSize: `${p.size}px`,
+            color: p.gold ? 'rgba(212,175,55,0.15)' : 'rgba(255,255,255,0.08)',
           }}
           animate={{
-            y: [0, -30, 0, 20, 0],
-            x: [0, 15, -10, 5, 0],
-            opacity: [0.03, 0.06, 0.03, 0.05, 0.03],
-            rotate: [0, 10, -5, 8, 0],
+            y: [0, -40, 0, 25, 0],
+            x: [0, 20, -15, 8, 0],
+            opacity: p.gold
+              ? [0.1, 0.2, 0.1, 0.15, 0.1]
+              : [0.06, 0.12, 0.06, 0.08, 0.06],
+            rotate: [0, 15, -8, 12, 0],
+            scale: [1, 1.1, 0.9, 1.05, 1],
           }}
           transition={{
             duration: p.duration,

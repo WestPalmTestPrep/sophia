@@ -9,6 +9,10 @@
   --color-board-hover: #3A3A3A;
   --color-board-active: #FFFFFF;
   --color-board-glow: rgba(255, 255, 255, 0.15);
+
+  --color-gold: #d4af37;
+  --color-gold-dim: rgba(212, 175, 55, 0.3);
+  --color-gold-glow: rgba(212, 175, 55, 0.15);
 }
 
 /* Grain overlay */
