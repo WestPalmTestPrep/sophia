@@ -349,9 +349,9 @@ export function CelebrationOverlay({ onDismiss }: CelebrationOverlayProps) {
                 transition={{ delay: 0.5 }}
                 className="font-sans text-white/75 text-sm leading-relaxed"
               >
-                Every square explored. Every memory unlocked.
+                Every square explored. Every section unlocked.
                 <br />
-                Every chapter of Sophia&apos;s story, revealed.
+                You actually finished the whole thing. I&apos;m impressed. Don&apos;t tell anyone I said that.
               </motion.p>
             </motion.div>
           )}
@@ -376,7 +376,7 @@ export function CelebrationOverlay({ onDismiss }: CelebrationOverlayProps) {
                 className="font-mono text-[9px] tracking-[0.4em] uppercase"
                 style={{ color: 'rgba(212,175,55,0.5)' }}
               >
-                Naturally Unexpected. Always.
+                Welcome to the family. — Nick
               </motion.p>
               <motion.p
                 animate={{ opacity: [0.2, 0.5, 0.2] }}

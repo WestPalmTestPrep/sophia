@@ -15,7 +15,7 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
       animate={{ clipPath: 'circle(150% at 50% 50%)' }}
       exit={{ clipPath: 'circle(0% at 50% 50%)' }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-0 z-50 bg-black overflow-y-auto"
+      className="fixed inset-0 z-50 bg-black overflow-y-auto overscroll-contain"
     >
       {/* Subtle gold accent line at top */}
       <motion.div
@@ -54,6 +54,7 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="px-4 sm:px-8 py-6 sm:py-10 max-w-5xl mx-auto"
+        style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
       >
         {children}
       </motion.div>

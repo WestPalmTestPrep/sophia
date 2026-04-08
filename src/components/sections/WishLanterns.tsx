@@ -20,16 +20,17 @@ const COLORS = [
 ];
 
 const PRE_WISHES = [
-  'May your light never dim.',
-  'To a year of golden hours.',
-  'Naturally Unexpected, always.',
-  'The queen takes the board.',
-  'Every frame, a masterpiece.',
+  'May your invoices always get paid on time.',
+  'To another year of making the rest of us look bad.',
+  'Happy Birthday from your favorite in-law (don\'t argue).',
+  'May your WiFi be strong and your clients be easy.',
+  'Wishing you slightly less ambition so I can catch up.',
 ];
 
-function FloatingLantern({ lantern }: { lantern: Lantern }) {
+function FloatingLantern({ lantern, containerHeight }: { lantern: Lantern; containerHeight: number }) {
   const duration = 15 + Math.random() * 10;
   const sway = 30 + Math.random() * 40;
+  const travelDistance = (containerHeight || 500) * 1.3;
 
   return (
     <motion.div
@@ -37,7 +38,7 @@ function FloatingLantern({ lantern }: { lantern: Lantern }) {
       style={{ left: `${lantern.x}%`, bottom: '-5%' }}
       initial={{ y: 0, opacity: 0 }}
       animate={{
-        y: [0, -window.innerHeight * 1.3],
+        y: [0, -travelDistance],
         x: [0, sway, -sway * 0.5, sway * 0.3, 0],
         opacity: [0, 1, 1, 1, 0.6, 0],
       }}
@@ -140,8 +141,16 @@ export function WishLanterns() {
   const [lanterns, setLanterns] = useState<Lantern[]>([]);
   const [wish, setWish] = useState('');
   const [preWishIndex, setPreWishIndex] = useState(0);
+  const [skyHeight, setSkyHeight] = useState(500);
   const idRef = useRef(0);
+  const skyRef = useRef<HTMLDivElement>(null);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  useEffect(() => {
+    if (skyRef.current) {
+      setSkyHeight(skyRef.current.clientHeight);
+    }
+  }, []);
 
   const playChime = useCallback(() => {
     try {
@@ -194,6 +203,7 @@ export function WishLanterns() {
     <div className="flex flex-col items-center gap-6 py-4">
       {/* Sky */}
       <div
+        ref={skyRef}
         className="relative w-full overflow-hidden rounded-lg"
         style={{
           height: 'min(65vh, 500px)',
@@ -223,7 +233,7 @@ export function WishLanterns() {
         {/* Lanterns */}
         <AnimatePresence>
           {lanterns.map((l) => (
-            <FloatingLantern key={l.id} lantern={l} />
+            <FloatingLantern key={l.id} lantern={l} containerHeight={skyHeight} />
           ))}
         </AnimatePresence>
 
@@ -236,7 +246,7 @@ export function WishLanterns() {
               className="font-serif text-sm italic"
               style={{ color: 'rgba(212,175,55,0.4)' }}
             >
-              The sky awaits your wishes...
+              Write a wish or just release one. I wrote some for you because I&apos;m helpful like that.
             </motion.p>
           </div>
         )}
@@ -257,14 +267,14 @@ export function WishLanterns() {
             onChange={(e) => setWish(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && releaseLantern()}
             placeholder="Write a birthday wish..."
-            className="flex-1 bg-transparent px-4 py-3 font-serif text-sm text-white/80 placeholder:text-white/25 outline-none"
+            className="flex-1 bg-transparent px-4 py-3 font-serif text-sm text-white/80 placeholder:text-white/25 outline-none min-h-[44px]"
             maxLength={60}
           />
           <motion.button
             onClick={releaseLantern}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-5 py-3 font-mono text-[10px] tracking-widest uppercase flex-shrink-0"
+            className="px-4 sm:px-5 py-3 font-mono text-[10px] tracking-widest uppercase flex-shrink-0 min-h-[44px]"
             style={{ color: '#d4af37' }}
           >
             Release ✦
@@ -273,8 +283,8 @@ export function WishLanterns() {
 
         <p className="text-center font-mono text-[9px] text-white/35 tracking-wider">
           {lanterns.length === 0
-            ? 'Type a wish or release a lantern with a pre-written one'
-            : `${lanterns.length} wish${lanterns.length === 1 ? '' : 'es'} released into the sky`}
+            ? 'Type your own or use one of my pre-loaded bangers'
+            : `${lanterns.length} wish${lanterns.length === 1 ? '' : 'es'} released — keep going`}
         </p>
       </div>
     </div>

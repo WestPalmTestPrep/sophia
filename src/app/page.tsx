@@ -12,7 +12,7 @@ export default function Home() {
   const [phase, setPhase] = useState<Phase>('landing');
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-[100dvh] bg-black text-white">
       <GrainOverlay />
       <CursorGlow />
       <AnimatePresence mode="wait">

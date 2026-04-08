@@ -44,7 +44,7 @@ const SECTION_TITLES: Record<SectionId, string> = {
   achievements: 'The Puzzle',
   viewfinder: 'Wish Lanterns',
   words: 'The Constellation',
-  moodboard: 'The Letter',
+  moodboard: 'The Letter from Nick',
   sophietok: 'Red Carpet',
 };
 
@@ -123,7 +123,7 @@ export function Chessboard() {
   const progress = unlockedSections.size / UNLOCKABLE_SQUARES.length;
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 pb-20 sm:pb-4">
+    <div className="relative flex flex-col items-center justify-center min-h-[100dvh] p-2 sm:p-4 pb-20 sm:pb-4">
       <AuroraBackground />
       <ParticleField />
       <Confetti active={konamiTriggered} />

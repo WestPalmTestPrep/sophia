@@ -15,9 +15,9 @@ const SCENES: Scene[] = [
   {
     id: '9',
     year: '2025',
-    title: 'A Decade of Vision',
+    title: 'The Full Resume',
     description:
-      'Photographer. Creative Director. Fine Artist. Ten years behind the lens and she\'s just getting started.',
+      'Photographer. Creative Director. Fine Artist. Three businesses. A decade in. The rest of us are still updating our LinkedIn bios.',
     timestamp: '01:42:37',
   },
   {
@@ -25,7 +25,7 @@ const SCENES: Scene[] = [
     year: '2024',
     title: 'Vogue Called',
     description:
-      '"It\'s almost curated to be so uncurated looking." The world caught up to what we already knew.',
+      '"It\'s almost curated to be so uncurated looking." Vogue literally quoted her. I can\'t even get a text back.',
     timestamp: '01:28:15',
   },
   {
@@ -33,7 +33,7 @@ const SCENES: Scene[] = [
     year: '2023',
     title: 'PAV Weddings',
     description:
-      'Fine art editorial wedding photography. Every couple\'s story told through an artistic lens.',
+      'Fine art editorial wedding photography. Making couples cry with how good their photos are. Honestly kind of a flex.',
     timestamp: '01:15:44',
   },
   {
@@ -41,7 +41,7 @@ const SCENES: Scene[] = [
     year: '2022',
     title: 'West Palm Empire',
     description:
-      'Built the base. Established the brand. South Florida became her canvas.',
+      'Built the brand in South Florida. While the rest of us were arguing about where to get lunch, she was building an empire.',
     timestamp: '00:58:22',
   },
   {
@@ -49,7 +49,7 @@ const SCENES: Scene[] = [
     year: '2021',
     title: 'The Bold Move',
     description:
-      'NYC → West Palm Beach. No safety net. No plan B. Everyone said wait. She said watch.',
+      'NYC → West Palm Beach. No safety net. No plan B. Everyone said "are you sure?" She was sure.',
     timestamp: '00:44:08',
   },
   {
@@ -57,7 +57,7 @@ const SCENES: Scene[] = [
     year: '2020',
     title: 'PAV Photography',
     description:
-      'The brand is born. "Most photography is a luxury. Mine is an investment."',
+      '"Most photography is a luxury. Mine is an investment." Imagine being 20-something and saying that with a straight face. And being right.',
     timestamp: '00:31:55',
   },
   {
@@ -65,7 +65,7 @@ const SCENES: Scene[] = [
     year: '2019',
     title: 'AS IF Magazine',
     description:
-      'Interned at the high-end fashion publication in Brooklyn. Learned the game from the inside.',
+      'Interned at a high-end fashion magazine in Brooklyn. Most people intern and get coffee. She interned and got a career.',
     timestamp: '00:22:10',
   },
   {
@@ -73,7 +73,7 @@ const SCENES: Scene[] = [
     year: '2018',
     title: 'Fashion Institute',
     description:
-      'FIT NYC. Where fashion meets photography meets art. She already knew she was different.',
+      'FIT NYC. Where fashion meets photography meets art. She showed up already knowing what she wanted. Must be nice.',
     timestamp: '00:11:33',
   },
   {
@@ -81,7 +81,7 @@ const SCENES: Scene[] = [
     year: '2016',
     title: 'Where It Started',
     description:
-      'Nassau CC. A girl with a camera and a dream bigger than the frame could hold.',
+      'Nassau CC. A camera. A dream. Absolutely zero chill about either of them. And honestly? Good for her.',
     timestamp: '00:03:47',
   },
 ];
@@ -287,7 +287,7 @@ export function Rewind() {
             animate={{ opacity: 1, x: glitchOffset }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 sm:px-16 z-10"
+            className="absolute inset-0 flex flex-col items-center justify-center text-center px-5 sm:px-16 z-10"
           >
             {/* Year — big */}
             <motion.p
@@ -396,7 +396,7 @@ export function Rewind() {
 
       {/* VCR Controls */}
       <div
-        className="flex items-center justify-center gap-1 rounded-lg px-4 py-2"
+        className="flex items-center justify-center gap-1 rounded-lg px-3 sm:px-4 py-1.5 sm:py-2"
         style={{
           background: 'rgba(20,20,20,0.9)',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -406,7 +406,7 @@ export function Rewind() {
         <button
           onClick={isPlaying ? stop : startPlay}
           disabled={currentIndex <= 0 && !isPlaying}
-          className="px-3 py-1.5 font-mono text-[10px] tracking-wider uppercase transition-colors disabled:opacity-20"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono text-sm sm:text-[10px] tracking-wider uppercase transition-colors disabled:opacity-20"
           style={{ color: isPlaying ? '#4ade80' : 'rgba(255,255,255,0.5)' }}
         >
           ▶
@@ -415,7 +415,7 @@ export function Rewind() {
         {/* Pause */}
         <button
           onClick={stop}
-          className="px-3 py-1.5 font-mono text-[10px] tracking-wider uppercase transition-colors"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono text-sm sm:text-[10px] tracking-wider uppercase transition-colors"
           style={{
             color:
               !isRewinding && !isPlaying
@@ -430,7 +430,7 @@ export function Rewind() {
         <button
           onClick={isRewinding ? stop : startRewind}
           disabled={currentIndex >= SCENES.length - 1 && !isRewinding}
-          className="px-3 py-1.5 font-mono text-[10px] tracking-wider uppercase transition-colors disabled:opacity-20"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono text-sm sm:text-[10px] tracking-wider uppercase transition-colors disabled:opacity-20"
           style={{
             color: isRewinding ? '#22d3ee' : 'rgba(255,255,255,0.5)',
           }}
@@ -439,20 +439,20 @@ export function Rewind() {
         </button>
 
         {/* Divider */}
-        <div className="w-px h-4 bg-white/10 mx-2" />
+        <div className="w-px h-5 bg-white/10 mx-1 sm:mx-2" />
 
         {/* Manual prev/next */}
         <button
           onClick={() => goToScene(currentIndex - 1)}
           disabled={currentIndex <= 0}
-          className="px-2 py-1.5 font-mono text-[10px] text-white/40 hover:text-white/70 transition-colors disabled:opacity-20"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono text-sm sm:text-[10px] text-white/40 hover:text-white/70 transition-colors disabled:opacity-20"
         >
           ◀
         </button>
         <button
           onClick={() => goToScene(currentIndex + 1)}
           disabled={currentIndex >= SCENES.length - 1}
-          className="px-2 py-1.5 font-mono text-[10px] text-white/40 hover:text-white/70 transition-colors disabled:opacity-20"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center font-mono text-sm sm:text-[10px] text-white/40 hover:text-white/70 transition-colors disabled:opacity-20"
         >
           ▶
         </button>

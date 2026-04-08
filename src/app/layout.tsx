@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="min-h-screen bg-black text-white antialiased font-sans overflow-x-hidden">
+      <body className="min-h-[100dvh] bg-black text-white antialiased font-sans overflow-x-hidden">
         {children}
       </body>
     </html>

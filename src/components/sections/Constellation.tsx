@@ -185,13 +185,13 @@ export function Constellation() {
           className="font-mono text-[10px] tracking-[0.4em] uppercase"
           style={{ color: 'rgba(212,175,55,0.65)' }}
         >
-          Tap the stars to reveal the constellation
+          Tap the stars — yes I mapped out her whole life in a constellation. I know.
         </p>
       </div>
 
       {/* Sky */}
       <div
-        className="relative w-full overflow-hidden rounded-lg aspect-[3/4] sm:aspect-[16/10]"
+        className="relative w-full overflow-hidden rounded-lg aspect-square sm:aspect-[16/10]"
         style={{
           background:
             'radial-gradient(ellipse at 50% 30%, #0c0c1a 0%, #050510 50%, #020208 100%)',
@@ -388,10 +388,10 @@ export function Constellation() {
               className="font-serif text-lg sm:text-xl italic tracking-wider"
               style={{ color: 'rgba(212,175,55,0.85)' }}
             >
-              The Queen&apos;s Constellation
+              The Sophia Constellation
             </p>
             <p className="font-mono text-[9px] text-white/50 tracking-widest uppercase">
-              Every star in its place. Every chapter connected.
+              Her whole resume, but make it astronomy.
             </p>
           </motion.div>
         ) : (

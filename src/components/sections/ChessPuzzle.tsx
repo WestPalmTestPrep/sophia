@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// A real chess position: White to checkmate in 2 moves
+// Smothered Mate — White to play, mate in 1
 // Board from White's perspective (row 0 = rank 8, row 7 = rank 1)
-// Starting position: White Qd1, Kf1, Rh1 vs Black Kh8, Rf8, Pg7,Ph7
-// Solution: 1. Qd8! (pins the rook) Kg8 forced, 2. Qxf8#
+// Position: White Nc6, Re1, Kg1 vs Black Kg8, Rf8, Rh8, Pf7, Pg7, Ph7
+// Solution: Ne7# (smothered mate — king boxed in by own pieces)
 
 type PieceType = 'K' | 'Q' | 'R' | 'B' | 'N' | 'P';
 type PieceColor = 'w' | 'b';
@@ -27,33 +27,22 @@ const PIECE_SYMBOLS: Record<string, string> = {
 
 const INITIAL_BOARD: BoardState = {
   // White pieces
-  '7-3': { type: 'Q', color: 'w' }, // Qd1
-  '7-5': { type: 'K', color: 'w' }, // Kf1
-  '7-7': { type: 'R', color: 'w' }, // Rh1
+  '2-2': { type: 'N', color: 'w' }, // Nc6
+  '7-4': { type: 'R', color: 'w' }, // Re1
+  '7-6': { type: 'K', color: 'w' }, // Kg1
   // Black pieces
-  '0-7': { type: 'K', color: 'b' }, // Kh8
+  '0-6': { type: 'K', color: 'b' }, // Kg8
   '0-5': { type: 'R', color: 'b' }, // Rf8
+  '0-7': { type: 'R', color: 'b' }, // Rh8
+  '1-5': { type: 'P', color: 'b' }, // Pf7
   '1-6': { type: 'P', color: 'b' }, // Pg7
   '1-7': { type: 'P', color: 'b' }, // Ph7
 };
 
-type PuzzlePhase = 'intro' | 'move1' | 'response' | 'move2' | 'solved' | 'wrong';
+type PuzzlePhase = 'intro' | 'playing' | 'solved' | 'wrong';
 
-// Correct moves
-const CORRECT_MOVE_1 = { from: '7-3', to: '0-3' }; // Qd1-d8
-const BLACK_RESPONSE = { from: '0-7', to: '1-7' };   // Kh8-h7 (forced, only legal move since Rf8 is pinned)
-// Actually let's make it Kg8 since h7 has a pawn
-// Black's king goes to g8
-const BLACK_RESPONSE_FIXED = { from: '0-7', to: '1-6' }; // Kh8 can't go to g7 (pawn there)
-// Wait, let me reconsider. With Qd8, Rf8 is attacked and pinned.
-// Black king on h8: can go to g8 (1-6 is g7 which has pawn), or...
-// Actually row 1, col 6 = g7 which has a black pawn.
-// King h8 can go to: g8 (0-6) — yes! And g7 has pawn so can't go there.
-// So: Kh8 -> Kg8 (0-6 -> wait, h8 is 0-7, g8 is 0-6)
-// Then Qd8xf8# (queen takes rook on f8, checkmate because g7 pawn blocks escape)
-
-const CORRECT_BLACK_RESPONSE = { from: '0-7', to: '0-6' }; // Kh8 -> Kg8
-const CORRECT_MOVE_2 = { from: '0-3', to: '0-5' };          // Qd8xf8#
+// Correct move: Knight from c6 to e7 (smothered mate)
+const CORRECT_MOVE = { from: '2-2', to: '1-4' }; // Nc6-e7#
 
 interface PuzzleSquareProps {
   row: number;
@@ -87,8 +76,7 @@ function PuzzleSquare({ row, col, piece, isLight, isSelected, isHighlighted, isL
       whileTap={{ scale: 0.92 }}
     >
       {piece && (
-        <motion.span
-          layout
+        <span
           className="text-2xl sm:text-4xl leading-none select-none"
           style={{
             color: piece.color === 'w' ? '#d4af37' : '#888',
@@ -96,12 +84,9 @@ function PuzzleSquare({ row, col, piece, isLight, isSelected, isHighlighted, isL
               ? 'drop-shadow(0 0 6px rgba(212,175,55,0.4))'
               : 'drop-shadow(0 0 3px rgba(0,0,0,0.5))',
           }}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         >
           {PIECE_SYMBOLS[`${piece.color}${piece.type}`]}
-        </motion.span>
+        </span>
       )}
 
       {/* Highlight dot for valid moves */}
@@ -113,6 +98,16 @@ function PuzzleSquare({ row, col, piece, isLight, isSelected, isHighlighted, isL
           style={{ backgroundColor: 'rgba(212,175,55,0.3)' }}
         />
       )}
+
+      {/* Capture indicator on enemy pieces */}
+      {isHighlighted && piece && piece.color === 'b' && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ border: '3px solid rgba(212,175,55,0.4)' }}
+        />
+      )}
     </motion.div>
   );
 }
@@ -122,7 +117,6 @@ export function ChessPuzzle() {
   const [phase, setPhase] = useState<PuzzlePhase>('intro');
   const [selected, setSelected] = useState<string | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
-  const [moveCount, setMoveCount] = useState(0);
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [shakeKey, setShakeKey] = useState(0);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -145,19 +139,25 @@ export function ChessPuzzle() {
   }, []);
 
   const getValidMoves = useCallback((pos: string): string[] => {
-    if (phase === 'move1') {
-      // Only the queen on 7-3 can move, and only Qd8 is correct
-      // But show a few plausible squares to make it feel like a real puzzle
-      if (pos === '7-3') {
-        return ['0-3', '3-3', '4-3', '5-3', '6-3', '3-7', '4-6', '5-5', '6-4']; // Column d + diagonal
-      }
+    if (phase !== 'playing') return [];
+
+    // Knight on c6 — show all legal knight moves
+    if (pos === '2-2') {
+      // L-shaped moves from (2,2): (0,1), (0,3), (1,0), (1,4), (3,0), (3,4), (4,1), (4,3)
+      // Filter out squares with white pieces
+      return ['0-1', '0-3', '1-0', '1-4', '3-0', '3-4', '4-1', '4-3'];
     }
-    if (phase === 'move2') {
-      // Queen on d8 can take f8
-      if (pos === '0-3') {
-        return ['0-5', '0-4', '0-6', '0-1', '0-2']; // Along rank 8
-      }
+
+    // Rook on e1 — show some plausible rook moves along the e-file
+    if (pos === '7-4') {
+      return ['0-4', '1-4', '2-4', '3-4', '4-4', '5-4', '6-4'];
     }
+
+    // King on g1 — show king moves
+    if (pos === '7-6') {
+      return ['6-5', '6-6', '6-7', '7-5', '7-7'];
+    }
+
     return [];
   }, [phase]);
 
@@ -165,7 +165,7 @@ export function ChessPuzzle() {
     const key = `${row}-${col}`;
     const piece = board[key];
 
-    if (phase === 'intro' || phase === 'response' || phase === 'solved' || phase === 'wrong') return;
+    if (phase !== 'playing') return;
 
     // Select a white piece
     if (piece && piece.color === 'w') {
@@ -185,71 +185,31 @@ export function ChessPuzzle() {
         return;
       }
 
-      if (phase === 'move1') {
-        if (key === CORRECT_MOVE_1.to) {
-          // Correct! Move queen to d8
-          const newBoard = { ...board };
-          const piece = newBoard[selected];
-          delete newBoard[selected];
-          newBoard[key] = piece;
-          setBoard(newBoard);
-          setLastMove({ from: selected, to: key });
-          setSelected(null);
-          setMoveCount(1);
-          playSound(600, 0.15);
-          playSound(900, 0.15);
+      if (selected === CORRECT_MOVE.from && key === CORRECT_MOVE.to) {
+        // Correct! Ne7# — smothered mate!
+        const newBoard = { ...board };
+        const movingPiece = newBoard[selected];
+        delete newBoard[selected];
+        newBoard[key] = movingPiece;
+        setBoard(newBoard);
+        setLastMove({ from: selected, to: key });
+        setSelected(null);
 
-          // Black responds after delay
-          setPhase('response');
-          setTimeout(() => {
-            const responseBoard = { ...newBoard };
-            const bKing = responseBoard[CORRECT_BLACK_RESPONSE.from];
-            delete responseBoard[CORRECT_BLACK_RESPONSE.from];
-            // Remove pawn on g7 since king can't actually go there...
-            // Actually Kg8 is 0-6 which doesn't have a pawn (g7 pawn is at 1-6)
-            responseBoard[CORRECT_BLACK_RESPONSE.to] = bKing;
-            setBoard(responseBoard);
-            setLastMove({ from: CORRECT_BLACK_RESPONSE.from, to: CORRECT_BLACK_RESPONSE.to });
-            playSound(400, 0.1);
-            setTimeout(() => setPhase('move2'), 400);
-          }, 600);
-        } else {
-          // Wrong move
-          setWrongAttempts(w => w + 1);
-          setShakeKey(k => k + 1);
-          setSelected(null);
-          playSound(200, 0.2, 'triangle');
-          setPhase('wrong');
-          setTimeout(() => setPhase('move1'), 800);
-        }
-      } else if (phase === 'move2') {
-        if (key === CORRECT_MOVE_2.to) {
-          // Checkmate!
-          const newBoard = { ...board };
-          const piece = newBoard[selected];
-          delete newBoard[selected];
-          delete newBoard[key]; // Capture rook
-          newBoard[key] = piece;
-          setBoard(newBoard);
-          setLastMove({ from: selected, to: key });
-          setSelected(null);
-          setMoveCount(2);
+        // Victory fanfare
+        playSound(523, 0.2);
+        setTimeout(() => playSound(659, 0.2), 150);
+        setTimeout(() => playSound(784, 0.2), 300);
+        setTimeout(() => playSound(1047, 0.4), 450);
 
-          // Victory fanfare
-          playSound(523, 0.2);
-          setTimeout(() => playSound(659, 0.2), 150);
-          setTimeout(() => playSound(784, 0.2), 300);
-          setTimeout(() => playSound(1047, 0.4), 450);
-
-          setTimeout(() => setPhase('solved'), 800);
-        } else {
-          setWrongAttempts(w => w + 1);
-          setShakeKey(k => k + 1);
-          setSelected(null);
-          playSound(200, 0.2, 'triangle');
-          setPhase('wrong');
-          setTimeout(() => setPhase('move2'), 1500);
-        }
+        setTimeout(() => setPhase('solved'), 600);
+      } else {
+        // Wrong move
+        setWrongAttempts(w => w + 1);
+        setShakeKey(k => k + 1);
+        setSelected(null);
+        playSound(200, 0.2, 'triangle');
+        setPhase('wrong');
+        setTimeout(() => setPhase('playing'), 800);
       }
     }
   }, [board, phase, selected, getValidMoves, playSound]);
@@ -258,10 +218,9 @@ export function ChessPuzzle() {
 
   const resetPuzzle = useCallback(() => {
     setBoard({ ...INITIAL_BOARD });
-    setPhase('move1');
+    setPhase('playing');
     setSelected(null);
     setLastMove(null);
-    setMoveCount(0);
     setWrongAttempts(0);
   }, []);
 
@@ -279,7 +238,7 @@ export function ChessPuzzle() {
           ♛
         </motion.div>
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase" style={{ color: 'rgba(212,175,55,0.65)' }}>
-          White to play — Checkmate in 2
+          White to play — Mate in 1
         </p>
       </div>
 
@@ -290,13 +249,13 @@ export function ChessPuzzle() {
           className="text-center space-y-6"
         >
           <p className="font-serif text-sm sm:text-base text-white/65 leading-relaxed max-w-sm mx-auto">
-            Every queen knows how to finish the game. Can you find the checkmate?
+            I spent way too long setting this puzzle up. You better actually try it. White to move — find the checkmate.
           </p>
           <motion.button
-            onClick={() => setPhase('move1')}
+            onClick={() => setPhase('playing')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 rounded-full font-mono text-sm tracking-widest uppercase"
+            className="px-8 py-3 rounded-full font-mono text-sm tracking-widest uppercase min-h-[48px]"
             style={{
               background: 'rgba(212,175,55,0.12)',
               border: '1px solid rgba(212,175,55,0.3)',
@@ -321,7 +280,7 @@ export function ChessPuzzle() {
             ? { x: { duration: 0.5 } }
             : { duration: 0.5, type: 'spring' }
           }
-          className="w-full max-w-[min(85vw,400px)]"
+          className="w-full max-w-[min(92vw,400px)]"
         >
           <div
             className="grid grid-cols-8 rounded-lg overflow-hidden"
@@ -353,7 +312,7 @@ export function ChessPuzzle() {
             })}
           </div>
 
-          {/* Rank labels */}
+          {/* File labels */}
           <div className="flex justify-between mt-1 px-1">
             {['a','b','c','d','e','f','g','h'].map(l => (
               <span key={l} className="text-[7px] text-white/30 font-mono w-[12.5%] text-center">{l}</span>
@@ -364,34 +323,17 @@ export function ChessPuzzle() {
 
       {/* Status messages */}
       <AnimatePresence mode="wait">
-        {phase === 'move1' && (
-          <motion.div key="m1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center space-y-1">
-            <p className="font-serif text-sm text-white/60">Your move, White.</p>
+        {phase === 'playing' && (
+          <motion.div key="playing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center space-y-1">
+            <p className="font-serif text-sm text-white/60">Your move, White. One move to end it.</p>
             <p className="font-mono text-[9px] text-white/35 tracking-wider">Select a piece, then select where to move</p>
-          </motion.div>
-        )}
-        {phase === 'response' && (
-          <motion.div key="resp" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center">
-            <motion.p
-              animate={{ opacity: [0.4, 0.8, 0.4] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="font-serif text-sm text-white/50 italic"
-            >
-              Black is thinking...
-            </motion.p>
-          </motion.div>
-        )}
-        {phase === 'move2' && (
-          <motion.div key="m2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center space-y-1">
-            <p className="font-serif text-sm text-white/60">Finish it. Find the checkmate.</p>
-            <p className="font-mono text-[9px] text-white/35 tracking-wider">One more move...</p>
           </motion.div>
         )}
         {phase === 'wrong' && (
           <motion.p key="wrong" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="font-serif text-sm text-red-400/70 italic"
           >
-            Not quite — try again.
+            Nope. Try again.
           </motion.p>
         )}
         {phase === 'solved' && (
@@ -408,7 +350,7 @@ export function ChessPuzzle() {
               Checkmate.
             </motion.p>
             <p className="font-serif text-sm text-white/60 italic max-w-sm leading-relaxed">
-              The queen always knows how to finish. Just like Sophia — she doesn&apos;t just play the game. She wins it.
+              Smothered mate — the king&apos;s own pieces trapped it. Alright fine, you got it. Don&apos;t let it go to your head.
             </p>
             {wrongAttempts > 0 && (
               <p className="font-mono text-[9px] text-white/30 tracking-wider">
@@ -419,7 +361,7 @@ export function ChessPuzzle() {
               onClick={resetPuzzle}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-2 rounded-full font-mono text-[10px] tracking-widest uppercase"
+              className="px-6 py-2 rounded-full font-mono text-[10px] tracking-widest uppercase min-h-[44px]"
               style={{
                 border: '1px solid rgba(212,175,55,0.2)',
                 color: 'rgba(212,175,55,0.6)',

@@ -78,6 +78,19 @@
   animation: float 3s ease-in-out infinite;
 }
 
+/* Prevent text selection on interactive elements on mobile */
+@media (pointer: coarse) {
+  button, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Prevent overscroll bounce on iOS within section overlays */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
 /* Custom cursor — disabled on touch devices */
 @media (pointer: fine) {
   body {

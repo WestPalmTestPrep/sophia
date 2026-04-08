@@ -17,25 +17,25 @@ const CARDS: TarotCard[] = [
     id: 'past',
     title: 'The Dreamer',
     reading:
-      'A girl with a camera at Camp Saint-Paul. She didn\'t know it yet, but every frame she captured was a rehearsal for greatness. From Nassau CC to FIT, she followed the thread that others couldn\'t see.',
+      'Camp Saint-Paul. Nassau CC. FIT. A camera that was basically an extension of her arm. She had the whole plan mapped out while everyone else was still picking a major. Annoying but impressive.',
     symbol: '☽',
     label: 'Your Past',
     color: '#8b5cf6',
   },
   {
     id: 'present',
-    title: 'The Queen',
+    title: 'The Overachiever',
     reading:
-      'Three empires. One vision. She turned "I\'m moving to Florida" into "Vogue called." She turned a luxury into an investment. The queen doesn\'t chase — she attracts.',
+      'Three brands. A Vogue feature. A move to Florida that turned out to be genius. She turned "photography is a luxury" into "photography is an investment" and somehow nobody argued. Running laps around the rest of us.',
     symbol: '♛',
     label: 'Your Present',
     color: '#d4af37',
   },
   {
     id: 'future',
-    title: 'The Star',
+    title: 'The In-Law',
     reading:
-      'International features. A gallery showing. A destination that starts with G and ends with reece. The next chapter isn\'t written yet, but the universe already cleared the path.',
+      'A destination that starts with G and ends with reece. A Stamatakis by July. International features. Probably a gallery showing. At this rate she\'ll have a Wikipedia page before I have a 401k.',
     symbol: '✦',
     label: 'Your Future',
     color: '#3b82f6',
@@ -195,7 +195,7 @@ function TarotCardComponent({
       className="relative cursor-pointer"
       style={{
         width: 'min(260px, 80vw)',
-        height: 'min(380px, 55vh)',
+        height: 'min(380px, 45vh)',
         perspective: '1000px',
       }}
       onClick={onFlip}
@@ -275,7 +275,7 @@ export function TarotReading() {
           className="font-mono text-[10px] tracking-[0.4em] uppercase"
           style={{ color: 'rgba(212,175,55,0.65)' }}
         >
-          The cards know all
+          The cards don't lie (unfortunately for you)
         </p>
       </div>
 
@@ -304,10 +304,10 @@ export function TarotReading() {
               className="font-serif text-lg sm:text-xl italic tracking-wider"
               style={{ color: 'rgba(212,175,55,0.8)' }}
             >
-              The stars are aligned, Sophia.
+              Yeah yeah, your future looks great. We get it.
             </p>
             <p className="font-mono text-[9px] text-white/50 tracking-widest uppercase">
-              Past, present, and future — all golden.
+              Past, present, future — all annoyingly impressive.
             </p>
           </motion.div>
         )}

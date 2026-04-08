@@ -3,27 +3,27 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const LETTER_TEXT = `Dear Sophia,
+const LETTER_TEXT = `Sophia,
 
-I've been trying to figure out how to say this for a while now.
+I'm not gonna lie — I can't believe I built you a whole website. An entire website. With animations and sound effects. This is more effort than I've put into anything in my life and I need you to acknowledge that.
 
-I could list your accomplishments — the Vogue feature, the three brands, the move to Florida that everyone doubted. I could talk about how you turned a camera into a career and a career into an empire.
+Alright let's get into it. In July you're officially becoming a Stamatakis, which means I'm contractually obligated to talk shit at every family dinner from now until we're old. Consider this my opening statement.
 
-But that's not what I want to say.
+Let's talk about your resume because it's honestly ridiculous. Vogue? VOGUE?? Most people put "proficient in Microsoft Excel" on their LinkedIn and you just casually got quoted in Vogue. "It's almost curated to be so uncurated looking." Meanwhile the rest of us are out here slapping a filter on our food pics. Relax.
 
-What I want to say is this: you make the people around you feel like anything is possible. Not because you say it, but because you live it. Every day. Without asking for permission.
+Then there's the whole "I'm moving to Florida" saga. NYC to West Palm Beach with no safety net? That's not a career move, that's a bet. And you didn't just land on your feet — you built PAV Photography, PAV Weddings, AND @sophitness_ because apparently running one business is for amateurs. Pick a struggle.
 
-You left New York when everyone said stay. You started PAV when the market said wait. You launched @sophitness_ because you don't do one thing — you do everything.
+Going from Nassau CC to FIT to interning at AS IF Magazine to running three businesses is legitimately insane. You speedran the whole thing while the rest of us were still trying to figure out what we wanted to do with our lives. Not gonna lie, it's lowkey intimidating.
 
-And somehow, through all of it, you stayed you. The girl from Camp Saint-Paul who just wanted to capture the world. Except now the world is paying attention.
+But real talk for a second — you're one of the most down-to-earth people I know. For someone whose whole brand is luxury fine art photography, you're surprisingly normal. And I mean that as a compliment. None of it went to your head. The kid from Camp Saint-Paul with a camera is still in there, she just has a Vogue feature now.
 
-So here's to another year of being naturally unexpected. Another year of proving them wrong. Another year of golden hours and bold moves and chess games where you're always the queen.
+Anyway. My brother is punching way above his weight class and everybody knows it. Welcome to the family. I'll be the brother-in-law who roasts you at every opportunity but also built you a website with a chess engine in it, so it evens out.
 
-Happy Birthday, Sophia.
+Happy Birthday. Go outside or something. Actually don't — you'd probably photograph a leaf and sell it as fine art.
 
-The board is yours.
+♛
 
-♛`;
+— Nick (the one who built the website, in case that wasn't obvious)`;
 
 const TYPING_SPEED = 35;
 const PAUSE_AFTER_PERIOD = 400;
@@ -150,7 +150,7 @@ export function LoveLetter() {
           border: '1px solid rgba(212,175,55,0.15)',
           boxShadow:
             '0 20px 60px rgba(0,0,0,0.5), 0 0 1px rgba(212,175,55,0.1), inset 0 0 80px rgba(0,0,0,0.3)',
-          minHeight: '60vh',
+          minHeight: 'min(60vh, 500px)',
         }}
       >
         {/* Paper texture overlay */}
@@ -174,8 +174,8 @@ export function LoveLetter() {
         {/* Content area */}
         <div
           ref={containerRef}
-          className="relative p-6 sm:p-10 overflow-y-auto"
-          style={{ maxHeight: '65vh' }}
+          className="relative p-5 sm:p-10 overflow-y-auto"
+          style={{ maxHeight: '70vh' }}
         >
           {!started ? (
             <motion.div
@@ -217,7 +217,7 @@ export function LoveLetter() {
                   className="font-serif text-lg tracking-wider italic"
                   style={{ color: 'rgba(212,175,55,0.7)' }}
                 >
-                  A letter for Sophia
+                  A letter from your future brother-in-law
                 </p>
                 <motion.p
                   animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -281,7 +281,7 @@ export function LoveLetter() {
             transition={{ delay: 0.5 }}
             className="font-mono text-[9px] text-white/40 tracking-widest uppercase"
           >
-            ✦ Sealed with love ✦
+            ✦ Sealed with chaos ✦
           </motion.p>
         )}
       </AnimatePresence>

@@ -14,49 +14,49 @@ const MOMENTS: Moment[] = [
   {
     year: '2016',
     headline: 'She picked up\na camera.',
-    quote: 'Nassau Community College. Nobody knew yet. She barely knew. But the lens knew.',
+    quote: 'Nassau Community College. Most freshmen were figuring out the dining hall. Sophia was figuring out aperture settings.',
     accent: '#4a6fa5',
   },
   {
     year: '2018',
-    headline: 'She sharpened\nthe vision.',
-    quote: 'Fashion Institute of Technology, NYC. Art school didn\'t teach her how to see — it taught everyone else that she already could.',
+    headline: 'She went\nto FIT.',
+    quote: 'Fashion Institute of Technology, NYC. While everyone was making mood boards she was making a career plan. Honestly kind of intense for a college student.',
     accent: '#7c5cbf',
   },
   {
     year: '2019',
-    headline: 'She learned\nthe game.',
-    quote: 'AS IF Magazine, Brooklyn. High fashion. High stakes. She watched, absorbed, and filed it all away for later.',
+    headline: 'She interned\nat a magazine.',
+    quote: 'AS IF Magazine, Brooklyn. High fashion publication. Most interns get coffee runs. She got a whole skill set. Unfair advantage honestly.',
     accent: '#bf5c8a',
   },
   {
     year: '2020',
-    headline: 'She named\nthe empire.',
-    quote: '"Most photography is a luxury. Mine is an investment." PAV Photography wasn\'t a business. It was a declaration.',
+    headline: 'She started\nthe empire.',
+    quote: '"Most photography is a luxury. Mine is an investment." Imagine saying that in your early twenties and then actually backing it up. PAV Photography was born.',
     accent: '#d4af37',
   },
   {
     year: '2021',
-    headline: 'She burned\nthe map.',
-    quote: 'NYC → West Palm Beach. No safety net. No plan B. Everyone whispered. She didn\'t hear them over the sound of her own courage.',
+    headline: 'She left\nNew York.',
+    quote: 'NYC → West Palm Beach. Everybody had an opinion. She had a moving truck. That\'s the difference between talkers and doers.',
     accent: '#e07040',
   },
   {
     year: '2023',
-    headline: 'She made them\ncry at weddings.',
-    quote: 'PAV Weddings. Fine art editorial. Every couple\'s love story, told through a lens that understood beauty wasn\'t posed — it was felt.',
+    headline: 'She launched\nPAV Weddings.',
+    quote: 'Fine art editorial wedding photography. She\'s literally the reason people cry at weddings now. Two businesses wasn\'t enough apparently.',
     accent: '#d4af37',
   },
   {
     year: '2024',
     headline: 'Vogue\ncalled.',
-    quote: '"It\'s almost curated to be so uncurated looking." The biggest name in fashion quoted a girl from Long Island. Let that sit.',
+    quote: '"It\'s almost curated to be so uncurated looking." Vogue quoted a photographer from Long Island. I still can\'t get over this one.',
     accent: '#c0c0c0',
   },
   {
     year: '2025',
-    headline: 'The queen\narrived.',
-    quote: 'A decade behind the lens. Three brands. One vision. Photographer. Creative Director. Fine Artist. Memory Maker. The full evolution.',
+    headline: 'She became\nfamily.',
+    quote: 'A decade behind the lens. Three brands. A Vogue feature. And now she\'s marrying my brother. Guy won the lottery and he knows it.',
     accent: '#d4af37',
   },
 ];
@@ -249,7 +249,7 @@ export function RedCarpet() {
               className="font-mono text-[10px] tracking-[0.5em] uppercase mb-4"
               style={{ color: 'rgba(212,175,55,0.6)' }}
             >
-              Presenting
+              Presenting (against my better judgment)
             </motion.p>
 
             <motion.h2
@@ -269,7 +269,7 @@ export function RedCarpet() {
               className="font-serif text-sm italic mt-4"
               style={{ color: 'rgba(255,255,255,0.45)' }}
             >
-              A decade in the making
+              A decade of making the rest of us look bad
             </motion.p>
 
             <motion.div
@@ -282,10 +282,11 @@ export function RedCarpet() {
                 onClick={() => goTo(0)}
                 animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="font-mono text-[9px] tracking-[0.4em] uppercase"
+                className="font-mono text-[9px] tracking-[0.4em] uppercase min-h-[44px] flex items-center justify-center px-4"
                 style={{ color: 'rgba(255,255,255,0.4)' }}
               >
-                Scroll down ↓
+                <span className="hidden sm:inline">Scroll down ↓</span>
+                <span className="sm:hidden">Swipe up ↑</span>
               </motion.button>
             </motion.div>
           </motion.div>
@@ -362,24 +363,28 @@ export function RedCarpet() {
       </AnimatePresence>
 
       {/* Progress dots — right side */}
-      <div className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2">
+      <div className="absolute right-1 sm:right-5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-0 sm:gap-2">
         {MOMENTS.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
-            className="w-2 h-2 rounded-full transition-all duration-300"
-            style={{
-              background: i === current
-                ? MOMENTS[Math.max(0, current)]?.accent || '#d4af37'
-                : i < current
-                ? 'rgba(212,175,55,0.3)'
-                : 'rgba(255,255,255,0.1)',
-              transform: i === current ? 'scale(1.5)' : 'scale(1)',
-              boxShadow: i === current
-                ? `0 0 8px ${MOMENTS[Math.max(0, current)]?.accent || '#d4af37'}40`
-                : 'none',
-            }}
-          />
+            className="w-8 h-8 sm:w-6 sm:h-6 flex items-center justify-center"
+          >
+            <div
+              className="w-2 h-2 rounded-full transition-all duration-300"
+              style={{
+                background: i === current
+                  ? MOMENTS[Math.max(0, current)]?.accent || '#d4af37'
+                  : i < current
+                  ? 'rgba(212,175,55,0.3)'
+                  : 'rgba(255,255,255,0.1)',
+                transform: i === current ? 'scale(1.5)' : 'scale(1)',
+                boxShadow: i === current
+                  ? `0 0 8px ${MOMENTS[Math.max(0, current)]?.accent || '#d4af37'}40`
+                  : 'none',
+              }}
+            />
+          </button>
         ))}
       </div>
 
@@ -401,7 +406,7 @@ export function RedCarpet() {
             className="font-serif text-sm italic"
             style={{ color: 'rgba(212,175,55,0.6)' }}
           >
-            ♛ Standing ovation. ♛
+            ♛ Fine. Standing ovation. You earned it. ♛
           </motion.p>
         )}
       </div>
