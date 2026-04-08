@@ -14,7 +14,7 @@ export function SectionWrapper({ title, onClose, children }: SectionWrapperProps
       initial={{ clipPath: 'circle(0% at 50% 50%)' }}
       animate={{ clipPath: 'circle(150% at 50% 50%)' }}
       exit={{ clipPath: 'circle(0% at 50% 50%)' }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-0 z-50 bg-black overflow-y-auto"
     >
       {/* Subtle gold accent line at top */}

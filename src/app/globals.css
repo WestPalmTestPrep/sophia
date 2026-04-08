@@ -15,6 +15,11 @@
   --color-gold-glow: rgba(212, 175, 55, 0.15);
 }
 
+/* Kill 300ms mobile tap delay */
+* {
+  touch-action: manipulation;
+}
+
 /* Grain overlay */
 .grain-overlay {
   position: fixed;

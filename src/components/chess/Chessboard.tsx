@@ -1,13 +1,14 @@
 'use client';
 
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useChessNavigation } from '@/hooks/useChessNavigation';
 import { useKonamiCode } from '@/hooks/useKonamiCode';
 import { useSoundEffects } from '@/hooks/useSoundEffects';
 import { UNLOCKABLE_SQUARES } from '@/data/board-config';
 import { SectionId } from '@/types';
 import { Square } from './Square';
+import { QueenPiece } from './QueenPiece';
 import { SectionWrapper } from '@/components/ui/SectionWrapper';
 import { Confetti } from '@/components/ui/Confetti';
 import { CelebrationOverlay } from '@/components/ui/CelebrationOverlay';
@@ -15,35 +16,36 @@ import { ParticleField } from '@/components/ui/ParticleField';
 import { AuroraBackground } from '@/components/ui/AuroraBackground';
 import { MoveLog } from '@/components/ui/MoveLog';
 import { BirthdayCountdown } from '@/components/ui/BirthdayCountdown';
-import { ScratchCards } from '@/components/sections/ScratchCards';
+import { BoardEffects } from '@/components/ui/BoardEffects';
+import { GiftUnwrap } from '@/components/sections/GiftUnwrap';
 import { Rewind } from '@/components/sections/Rewind';
 import { TarotReading } from '@/components/sections/TarotReading';
-import { AwardShow } from '@/components/sections/AwardShow';
-import { Viewfinder } from '@/components/sections/Viewfinder';
+import { ChessPuzzle } from '@/components/sections/ChessPuzzle';
+import { WishLanterns } from '@/components/sections/WishLanterns';
 import { Constellation } from '@/components/sections/Constellation';
 import { LoveLetter } from '@/components/sections/LoveLetter';
-import { Vinyl } from '@/components/sections/Vinyl';
+import { RedCarpet } from '@/components/sections/RedCarpet';
 
 const SECTION_COMPONENTS: Record<SectionId, React.ComponentType> = {
-  gallery: ScratchCards,
+  gallery: GiftUnwrap,
   messages: Rewind,
   timeline: TarotReading,
-  achievements: AwardShow,
-  viewfinder: Viewfinder,
+  achievements: ChessPuzzle,
+  viewfinder: WishLanterns,
   words: Constellation,
   moodboard: LoveLetter,
-  sophietok: Vinyl,
+  sophietok: RedCarpet,
 };
 
 const SECTION_TITLES: Record<SectionId, string> = {
-  gallery: 'Golden Tickets',
+  gallery: 'Unwrap',
   messages: 'The Rewind',
   timeline: 'The Reading',
-  achievements: 'The Sophia Awards',
-  viewfinder: 'Through the Lens',
+  achievements: 'The Puzzle',
+  viewfinder: 'Wish Lanterns',
   words: 'The Constellation',
   moodboard: 'The Letter',
-  sophietok: 'The Collection',
+  sophietok: 'Red Carpet',
 };
 
 export function Chessboard() {
@@ -118,6 +120,7 @@ export function Chessboard() {
   }, []);
 
   const ActiveComponent = activeSection ? SECTION_COMPONENTS[activeSection] : null;
+  const progress = unlockedSections.size / UNLOCKABLE_SQUARES.length;
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-2 sm:p-4 pb-20 sm:pb-4">
@@ -187,7 +190,6 @@ export function Chessboard() {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <LayoutGroup>
           <motion.div
             ref={boardRef}
             initial={{ opacity: 0, scale: 0.85, rotateX: 15 }}
@@ -215,19 +217,25 @@ export function Chessboard() {
               `,
             }}
           >
-            {/* Outer border glow - gold tinted */}
+            {/* Outer border glow — intensifies as more sections unlock */}
             <div
-              className="absolute -inset-px pointer-events-none z-10"
+              className="absolute -inset-px pointer-events-none z-10 transition-all duration-1000"
               style={{
-                border: '1px solid rgba(212,175,55,0.08)',
+                border: `1px solid rgba(212,175,55,${0.06 + progress * 0.2})`,
+                boxShadow: progress > 0.5
+                  ? `0 0 ${progress * 20}px rgba(212,175,55,${progress * 0.06})`
+                  : 'none',
               }}
             />
             <div
-              className="absolute -inset-[3px] pointer-events-none"
+              className="absolute -inset-[3px] pointer-events-none transition-all duration-1000"
               style={{
-                border: '1px solid rgba(212,175,55,0.03)',
+                border: `1px solid rgba(212,175,55,${0.02 + progress * 0.08})`,
               }}
             />
+
+            {/* Board sparkle effects layer */}
+            <BoardEffects progress={progress} />
 
             {/* Reflection effect under the board */}
             <div
@@ -245,7 +253,6 @@ export function Chessboard() {
               const isLight = (row + col) % 2 === 0;
               const key = `${row}-${col}`;
               const unlockConfig = unlockableMap.get(key);
-              const hasQueen = queenPosition.row === row && queenPosition.col === col;
               const isValid = isValidQueenMove(row, col);
 
               return (
@@ -255,15 +262,16 @@ export function Chessboard() {
                   col={col}
                   isLight={isLight}
                   unlockConfig={unlockConfig}
-                  hasQueen={hasQueen}
                   isValidMove={isValid}
                   isUnlocked={unlockConfig ? unlockedSections.has(unlockConfig.section) : false}
-                  onClick={() => isValid && moveQueen(row, col)}
+                  onClick={() => moveQueen(row, col)}
                 />
               );
             })}
+
+            {/* Queen piece — rendered once, animates position */}
+            <QueenPiece row={queenPosition.row} col={queenPosition.col} />
           </motion.div>
-        </LayoutGroup>
       </div>
 
       {/* File labels */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Position, SectionId } from '@/types';
 import { UNLOCKABLE_SQUARES, QUEEN_START } from '@/data/board-config';
 
@@ -8,15 +8,28 @@ export function useChessNavigation() {
   const [queenPosition, setQueenPosition] = useState<Position>(QUEEN_START);
   const [activeSection, setActiveSection] = useState<SectionId | null>(null);
   const [unlockedSections, setUnlockedSections] = useState<Set<SectionId>>(new Set());
-  const [isMoving, setIsMoving] = useState(false);
   const [moveHistory, setMoveHistory] = useState<Position[]>([QUEEN_START]);
+  const sectionTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // Use a ref so moveQueen always sees the latest position, not a stale closure
+  const queenPosRef = useRef<Position>(QUEEN_START);
 
   const isValidQueenMove = useCallback(
+    (row: number, col: number): boolean => {
+      if (row === queenPosRef.current.row && col === queenPosRef.current.col) return false;
+      const dr = Math.abs(row - queenPosRef.current.row);
+      const dc = Math.abs(col - queenPosRef.current.col);
+      return dr === 0 || dc === 0 || dr === dc;
+    },
+    [] // no deps — reads from ref
+  );
+
+  // Also expose a render-time version for UI display (valid move dots)
+  const isValidQueenMoveForRender = useCallback(
     (row: number, col: number): boolean => {
       if (row === queenPosition.row && col === queenPosition.col) return false;
       const dr = Math.abs(row - queenPosition.row);
       const dc = Math.abs(col - queenPosition.col);
-      // Queen: same row, same col, or diagonal
       return dr === 0 || dc === 0 || dr === dc;
     },
     [queenPosition]
@@ -29,31 +42,32 @@ export function useChessNavigation() {
 
   const moveQueen = useCallback(
     (row: number, col: number) => {
-      if (isMoving || !isValidQueenMove(row, col)) return;
+      if (!isValidQueenMove(row, col)) return;
 
-      setIsMoving(true);
+      if (sectionTimerRef.current) {
+        clearTimeout(sectionTimerRef.current);
+      }
+
+      // Update ref immediately so the next click validates correctly
+      queenPosRef.current = { row, col };
       setQueenPosition({ row, col });
       setMoveHistory((prev) => [...prev, { row, col }]);
 
       const section = getSquareSection(row, col);
       if (section) {
-        setTimeout(() => {
+        sectionTimerRef.current = setTimeout(() => {
           setActiveSection(section);
           setUnlockedSections((prev) => new Set(prev).add(section));
-          setIsMoving(false);
-        }, 500);
-      } else {
-        setTimeout(() => setIsMoving(false), 400);
+        }, 180);
       }
     },
-    [isMoving, isValidQueenMove, getSquareSection]
+    [isValidQueenMove, getSquareSection]
   );
 
   const closeSection = useCallback(() => {
     setActiveSection(null);
   }, []);
 
-  // Escape key to close sections
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape' && activeSection) {
@@ -70,12 +84,11 @@ export function useChessNavigation() {
     queenPosition,
     activeSection,
     unlockedSections,
-    isMoving,
     allUnlocked,
     moveHistory,
     moveQueen,
     closeSection,
-    isValidQueenMove,
+    isValidQueenMove: isValidQueenMoveForRender, // for UI rendering (dots, highlights)
     getSquareSection,
   };
 }

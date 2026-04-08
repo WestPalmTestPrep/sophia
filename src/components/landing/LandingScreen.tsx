@@ -81,7 +81,7 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
     });
     setParticles(burst);
 
-    setTimeout(onComplete, 800);
+    setTimeout(onComplete, 400);
   }, [exiting, onComplete]);
 
   // Animate particles
@@ -182,12 +182,12 @@ export function LandingScreen({ onComplete }: LandingScreenProps) {
       </motion.p>
 
       {/* SOPHIA — scramble reveal */}
-      <div className="overflow-hidden relative">
+      <div className="relative">
         <motion.h1
-          initial={{ y: '130%', opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          initial={{ y: '100%', opacity: 0, clipPath: 'inset(0 0 0 0)' }}
+          animate={{ y: 0, opacity: 1, clipPath: 'inset(-20% -10% -20% -10%)' }}
           transition={{ duration: 1.2, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-serif text-[18vw] sm:text-[14vw] md:text-[11vw] text-white tracking-[0.05em] leading-none relative"
+          className="font-serif text-[18vw] sm:text-[14vw] md:text-[11vw] text-white tracking-[0.05em] leading-tight relative"
           style={{
             textShadow: '0 0 80px rgba(212,175,55,0.15), 0 0 160px rgba(212,175,55,0.05)',
           }}

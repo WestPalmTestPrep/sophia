@@ -249,7 +249,7 @@ export function TarotReading() {
       next.add(id);
       setFlipped(next);
       if (next.size === CARDS.length) {
-        setTimeout(() => setAllRevealed(true), 1000);
+        setTimeout(() => setAllRevealed(true), 500);
       }
     },
     [flipped]

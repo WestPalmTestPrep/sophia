@@ -291,7 +291,7 @@ export function CelebrationOverlay({ onDismiss }: CelebrationOverlayProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 cursor-pointer overflow-hidden"
-      onClick={stage >= 1 ? onDismiss : undefined}
+      onClick={onDismiss}
     >
       {/* Fireworks */}
       <FireworksCanvas />

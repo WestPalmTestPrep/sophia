@@ -132,7 +132,7 @@ export function LoveLetter() {
       setTimeout(typeNext, delay);
     };
 
-    const startDelay = setTimeout(typeNext, 800);
+    const startDelay = setTimeout(typeNext, 300);
     return () => clearTimeout(startDelay);
   }, [isTyping, playKeystroke]);
 

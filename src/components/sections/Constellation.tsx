@@ -129,7 +129,7 @@ export function Constellation() {
       next.add(id);
       setActivated(next);
       if (next.size === STARS.length) {
-        setTimeout(() => setComplete(true), 800);
+        setTimeout(() => setComplete(true), 400);
       }
     },
     [activated]
@@ -158,7 +158,7 @@ export function Constellation() {
             const next = new Set(prev);
             next.add(target);
             if (next.size === STARS.length) {
-              setTimeout(() => setComplete(true), 800);
+              setTimeout(() => setComplete(true), 400);
             }
             return next;
           });

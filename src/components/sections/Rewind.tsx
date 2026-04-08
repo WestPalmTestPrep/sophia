@@ -206,10 +206,8 @@ export function Rewind() {
       if (index < 0 || index >= SCENES.length) return;
       playClick();
       triggerGlitch();
-      setTimeout(() => {
-        setCurrentIndex(index);
-        setCounter(SCENES[index].timestamp);
-      }, 200);
+      setCurrentIndex(index);
+      setCounter(SCENES[index].timestamp);
     },
     [playClick, triggerGlitch]
   );

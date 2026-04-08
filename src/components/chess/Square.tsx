@@ -3,14 +3,12 @@
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { BoardSquare } from '@/types';
-import { QueenPiece } from './QueenPiece';
 
 interface SquareProps {
   row: number;
   col: number;
   isLight: boolean;
   unlockConfig?: BoardSquare;
-  hasQueen: boolean;
   isValidMove: boolean;
   isUnlocked: boolean;
   onClick: () => void;
@@ -21,13 +19,12 @@ export function Square({
   col,
   isLight,
   unlockConfig,
-  hasQueen,
   isValidMove,
   isUnlocked,
   onClick,
 }: SquareProps) {
   const isUnlockable = !!unlockConfig;
-  const staggerDelay = (row + col) * 0.015;
+  const staggerDelay = (row + col) * 0.008;
 
   return (
     <motion.div
@@ -35,23 +32,34 @@ export function Square({
       animate={{ opacity: 1 }}
       transition={{ delay: staggerDelay, duration: 0.4 }}
       className={cn(
-        'relative aspect-square flex items-center justify-center select-none transition-all duration-300',
+        'relative aspect-square flex items-center justify-center select-none transition-colors duration-150',
         isLight ? 'bg-[#E8E8E8]' : 'bg-[#141414]',
         (isValidMove || isUnlockable) && 'cursor-pointer',
-        isValidMove && !hasQueen && !isUnlockable && 'hover:bg-white/[0.08]',
+        isValidMove && !isUnlockable && 'hover:bg-white/[0.08]',
       )}
-      onClick={onClick}
-      whileHover={isValidMove && !hasQueen ? { scale: 1.08, zIndex: 5 } : undefined}
-      whileTap={isValidMove ? { scale: 0.94 } : undefined}
+      onPointerUp={(e) => {
+        e.stopPropagation();
+        onClick();
+        // Launch a firework from empty non-move squares
+        if (!isValidMove && !isUnlockable) {
+          const canvas = document.querySelector('[data-board-effects]');
+          if (canvas) {
+            canvas.dispatchEvent(new CustomEvent('board-firework', {
+              detail: { x: e.clientX, y: e.clientY },
+            }));
+          }
+        }
+      }}
+      whileHover={isValidMove ? { scale: 1.05, zIndex: 5 } : undefined}
     >
       {/* Valid move indicator - gold dot */}
-      {isValidMove && !hasQueen && !isUnlockable && (
+      {isValidMove && !isUnlockable && (
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           className={cn(
             'w-2 h-2 rounded-full',
-            isLight ? 'bg-[rgba(160,120,20,0.4)]' : 'bg-[rgba(212,175,55,0.35)]'
+            isLight ? 'bg-[rgba(100,75,15,0.5)]' : 'bg-[rgba(212,175,55,0.4)]'
           )}
         />
       )}
@@ -73,16 +81,16 @@ export function Square({
             }}
           />
 
-          {/* Persistent gold border on unlockable squares */}
+          {/* Persistent border on unlockable squares — adapts to square color */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               border: isUnlocked
-                ? '1px solid rgba(212,175,55,0.25)'
-                : '1.5px solid rgba(212,175,55,0.4)',
+                ? `1px solid ${isLight ? 'rgba(107,82,16,0.3)' : 'rgba(212,175,55,0.25)'}`
+                : `1.5px solid ${isLight ? 'rgba(107,82,16,0.5)' : 'rgba(212,175,55,0.4)'}`,
               boxShadow: isUnlocked
-                ? 'inset 0 0 10px rgba(212,175,55,0.06)'
-                : 'inset 0 0 15px rgba(212,175,55,0.1)',
+                ? `inset 0 0 10px ${isLight ? 'rgba(107,82,16,0.08)' : 'rgba(212,175,55,0.06)'}`
+                : `inset 0 0 15px ${isLight ? 'rgba(107,82,16,0.12)' : 'rgba(212,175,55,0.1)'}`,
             }}
           />
 
@@ -104,10 +112,13 @@ export function Square({
           {/* Corner accents for unvisited */}
           {!isUnlocked && (
             <>
-              <div className="absolute top-0 left-0 w-2 h-2 border-t border-l pointer-events-none" style={{ borderColor: 'rgba(212,175,55,0.5)' }} />
-              <div className="absolute top-0 right-0 w-2 h-2 border-t border-r pointer-events-none" style={{ borderColor: 'rgba(212,175,55,0.5)' }} />
-              <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l pointer-events-none" style={{ borderColor: 'rgba(212,175,55,0.5)' }} />
-              <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r pointer-events-none" style={{ borderColor: 'rgba(212,175,55,0.5)' }} />
+              {['top-0 left-0 border-t border-l', 'top-0 right-0 border-t border-r', 'bottom-0 left-0 border-b border-l', 'bottom-0 right-0 border-b border-r'].map((pos) => (
+                <div
+                  key={pos}
+                  className={`absolute ${pos} w-2 h-2 pointer-events-none`}
+                  style={{ borderColor: isLight ? 'rgba(107,82,16,0.6)' : 'rgba(212,175,55,0.5)' }}
+                />
+              ))}
             </>
           )}
 
@@ -119,14 +130,16 @@ export function Square({
                 : { opacity: 0.45, scale: 1 }
               }
               transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-              className={cn(
-                'text-2xl sm:text-3xl transition-all duration-300',
-                isLight ? 'text-black/90' : 'text-white'
-              )}
-              style={!isUnlocked ? {
-                filter: `drop-shadow(0 0 8px rgba(212,175,55,0.6))`,
-              } : {
-                filter: `drop-shadow(0 0 3px rgba(212,175,55,0.2))`,
+              className="text-2xl sm:text-3xl transition-all duration-300"
+              style={{
+                color: isLight
+                  ? (isUnlocked ? '#6b5210' : '#8a6914')
+                  : (isUnlocked ? 'rgba(212,175,55,0.5)' : '#d4af37'),
+                filter: !isUnlocked
+                  ? (isLight
+                    ? 'drop-shadow(0 0 6px rgba(139,105,20,0.4))'
+                    : 'drop-shadow(0 0 8px rgba(212,175,55,0.6))')
+                  : 'none',
               }}
             >
               {unlockConfig.icon}
@@ -135,14 +148,15 @@ export function Square({
             {/* Label — always visible on unlockable squares, not just hover */}
             <span
               className={cn(
-                'text-[6px] sm:text-[8px] font-mono font-semibold tracking-[0.05em] uppercase whitespace-nowrap pointer-events-none leading-none mt-0.5',
+                'text-[6px] sm:text-[8px] font-mono font-bold tracking-[0.05em] uppercase whitespace-nowrap pointer-events-none leading-none mt-0.5',
                 isUnlocked
-                  ? 'opacity-40'
-                  : 'opacity-70',
-                isLight ? 'text-black/70' : 'text-white/80'
+                  ? 'opacity-50'
+                  : 'opacity-90',
               )}
               style={{
-                color: isUnlocked ? undefined : 'rgba(212,175,55,0.85)',
+                color: isUnlocked
+                  ? (isLight ? 'rgba(80,60,10,0.7)' : 'rgba(212,175,55,0.5)')
+                  : (isLight ? '#6b5210' : 'rgba(212,175,55,0.9)'),
               }}
             >
               {unlockConfig.label}
@@ -155,18 +169,19 @@ export function Square({
               <div
                 className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex items-center justify-center"
                 style={{
-                  backgroundColor: 'rgba(212,175,55,0.6)',
+                  backgroundColor: isLight ? 'rgba(107,82,16,0.7)' : 'rgba(212,175,55,0.6)',
                 }}
               >
-                <span className="text-[7px] sm:text-[8px] text-black font-bold leading-none">✓</span>
+                <span
+                  className="text-[7px] sm:text-[8px] font-bold leading-none"
+                  style={{ color: isLight ? '#E8E8E8' : '#000' }}
+                >✓</span>
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* Queen */}
-      {hasQueen && <QueenPiece />}
     </motion.div>
   );
 }
